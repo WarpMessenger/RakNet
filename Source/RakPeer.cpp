@@ -201,7 +201,9 @@ RakPeer::RakPeer()
 
 	StringCompressor::AddReference();
 	RakNet::StringTable::AddReference();
-	WSAStartupSingleton::AddRef();
+#ifdef _WIN32
+	WSAStartupSingleton::addRef();
+#endif
 
 	defaultMTUSize = mtuSizes[NUM_MTU_SIZES-1];
 	trackFrequencyTable = false;
@@ -216,10 +218,6 @@ RakPeer::RakPeer()
 	endThreads = true;
 	isMainLoopThreadActive = false;
 	incomingDatagramEventHandler=0;
-
-
-
-
 
 	// isRecvfromThreadActive=false;
 #if defined(GET_TIME_SPIKE_LIMIT) && GET_TIME_SPIKE_LIMIT>0
@@ -264,48 +262,6 @@ RakPeer::RakPeer()
 
 	remoteSystemIndexPool.SetPageSize(sizeof(DataStructures::MemoryPool<RemoteSystemIndex>::MemoryWithPage)*32);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	GenerateGUID();
 
 	quitAndDataEvents.InitEvent();
@@ -325,7 +281,9 @@ RakPeer::~RakPeer()
 
 	StringCompressor::RemoveReference();
 	RakNet::StringTable::RemoveReference();
-	WSAStartupSingleton::Deref();
+#ifdef _WIN32
+	WSAStartupSingleton::release();
+#endif
 
 	quitAndDataEvents.CloseEvent();
 
@@ -335,21 +293,6 @@ RakPeer::~RakPeer()
 	if (_server_handshake) RakNet::OP_DELETE(_server_handshake,_FILE_AND_LINE_);
 	if (_cookie_jar) RakNet::OP_DELETE(_cookie_jar,_FILE_AND_LINE_);
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // 	for (unsigned int i=0; i < pluginListTS.Size(); i++)
 // 		pluginListTS[i]->SetRakPeerInterface(0);
@@ -384,14 +327,8 @@ StartupResult RakPeer::Startup( unsigned int maxConnections, SocketDescriptor *s
 
 	if (threadPriority==-99999)
 	{
-
-
 #if   defined(_WIN32)
 		threadPriority=0;
-
-
-
-
 #else
 		threadPriority=1000;
 #endif

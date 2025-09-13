@@ -10,76 +10,56 @@
 
 #include "WSAStartupSingleton.h"
 
-
-
-
-
-#if   defined(_WIN32) && !defined(WINDOWS_STORE_RT)
-#include <winsock2.h>
-#include <ws2tcpip.h>
-
-
-
-
-
-#endif
 #include "RakNetDefines.h"
-#include <stdio.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#include <format>
+#include <iostream>
 
-int WSAStartupSingleton::refCount=0;
+WSAStartupSingleton& WSAStartupSingleton::instance(){
+	static WSAStartupSingleton singleton;
+	return singleton;
+}
 
 WSAStartupSingleton::WSAStartupSingleton() {}
-WSAStartupSingleton::~WSAStartupSingleton() {}
-void WSAStartupSingleton::AddRef(void)
-{
-#if defined(_WIN32) && !defined(WINDOWS_STORE_RT)
 
-	refCount++;
-	
-	if (refCount!=1)
-		return;
-
-
-
-
-
-	WSADATA winsockInfo;
-	if ( WSAStartup( MAKEWORD( 2, 2 ), &winsockInfo ) != 0 )
-	{
-#if  defined(_DEBUG) && !defined(WINDOWS_PHONE_8)
-		DWORD dwIOError = GetLastError();
-		LPVOID messageBuffer;
-		FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL, dwIOError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),  // Default language
-			( LPTSTR ) & messageBuffer, 0, NULL );
-		// something has gone wrong here...
-		RAKNET_DEBUG_PRINTF( "WSAStartup failed:Error code - %d\n%s", dwIOError, messageBuffer );
-		//Free the buffer.
-		LocalFree( messageBuffer );
-#endif
+WSAStartupSingleton::~WSAStartupSingleton() {
+	std::scoped_lock lock(refMutex);
+	if(refCount > 0){
+		#ifdef _WIN32
+		WSACleanup();
+		#endif
+		refCount = 0;
 	}
+}
 
+void WSAStartupSingleton::addRef()
+{
+#ifdef _WIN32
+	std::scoped_lock lock(refMutex);
+	if (++refCount == 1) {
+		if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+			DWORD error = GetLastError();
+			throw std::runtime_error(
+				std::format("WSAStartup failed with error code: {}", error)
+			);
+		}
+	}
 #endif
 }
-void WSAStartupSingleton::Deref(void)
+
+void WSAStartupSingleton::release()
 {
 #if defined(_WIN32) && !defined(WINDOWS_STORE_RT)
-	if (refCount==0)
-		return;
-		
-	if (refCount>1)
-	{
-		refCount--;
-		return;
+	std::scoped_lock lock(refMutex);
+
+	if (refCount == 0) {
+		throw std::logic_error("WSAStartupSingleton::release called without matching addRef");
 	}
-	
-	WSACleanup();
 
-
-
-
-
-	
-	refCount=0;
+	if (--refCount == 0) {
+		WSACleanup();
+	}
 #endif
 }

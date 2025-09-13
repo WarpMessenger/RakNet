@@ -11,16 +11,35 @@
 #ifndef __WSA_STARTUP_SINGLETON_H
 #define __WSA_STARTUP_SINGLETON_H
 
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+#include <mutex>
+#include <stdexcept>
+#include <string>
+
 class WSAStartupSingleton
 {
-public:
 	WSAStartupSingleton();
 	~WSAStartupSingleton();
-	static void AddRef(void);
-	static void Deref(void);
 
-protected:
-	static int refCount;
+	static inline int refCount = 0;
+	static inline std::mutex refMutex;
+#ifdef _WIN32
+	WSADATA wsaData{};
+#endif
+
+public:
+	static WSAStartupSingleton& instance();
+
+	WSAStartupSingleton(const WSAStartupSingleton&) = delete;
+	WSAStartupSingleton& operator=(const WSAStartupSingleton&) = delete;
+	WSAStartupSingleton(WSAStartupSingleton&&) = delete;
+	WSAStartupSingleton& operator=(WSAStartupSingleton&&) = delete;
+
+	void addRef();
+	void release();
 };
 
 #endif
