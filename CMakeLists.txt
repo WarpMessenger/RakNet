@@ -1,6 +1,9 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.19)
 
 project(RakNet)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if( NOT APPLE )
 # check 64 bit
@@ -43,7 +46,7 @@ endif()
 
 set( RAKNET_INCLUDE_DIRS ${RAKNETHEADERFILES} ${RAKNET_INCLUDE_ONLY_DIR} PARENT_SCOPE ) # Visible from outside
 
-include(./CmakeIncludes/CmakeMacros.txt)
+include(${CMAKE_CURRENT_SOURCE_DIR}/CmakeIncludes/CmakeMacros.txt)
 FIXLINKOPTIONS()
 FIXCOMPILEOPTIONS()
 

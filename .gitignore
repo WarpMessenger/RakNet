@@ -2,6 +2,7 @@
 [Dd]ebug/
 [Rr]elease/
 x64/
+.vscode/
 
 *.opensdf
 *.sdf
@@ -9,7 +10,6 @@ x64/
 *.suo
 
 # Xcode and OS X 
-build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -29,3 +29,6 @@ Debug/
 Release/
 .DS_Store
 .Trashes
+
+# other
+**build**/

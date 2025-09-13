@@ -19,19 +19,21 @@
 
 #include "Export.h"
 
+#include <cstdint>
+
 /// Initialise seed for Random Generator
 /// \note not threadSafe, use an instance of RakNetRandom if necessary per thread
 /// \param[in] seed The seed value for the random number generator.
-extern void RAK_DLL_EXPORT seedMT( unsigned int seed );
+extern void RAK_DLL_EXPORT seedMT( uint32_t seed );
 
 /// \internal
 /// \note not threadSafe, use an instance of RakNetRandom if necessary per thread
-extern unsigned int RAK_DLL_EXPORT reloadMT( void );
+extern uint32_t RAK_DLL_EXPORT reloadMT( void );
 
-/// Gets a random unsigned int
+/// Gets a random uint32_t
 /// \note not threadSafe, use an instance of RakNetRandom if necessary per thread
 /// \return an integer random value.
-extern unsigned int RAK_DLL_EXPORT randomMT( void );
+extern uint32_t RAK_DLL_EXPORT randomMT( void );
 
 /// Gets a random float
 /// \note not threadSafe, use an instance of RakNetRandom if necessary per thread
@@ -40,7 +42,7 @@ extern float RAK_DLL_EXPORT frandomMT( void );
 
 /// Randomizes a buffer
 /// \note not threadSafe, use an instance of RakNetRandom if necessary per thread
-extern void RAK_DLL_EXPORT fillBufferMT( void *buffer, unsigned int bytes );
+extern void RAK_DLL_EXPORT fillBufferMT( void *buffer, uint32_t bytes );
 
 namespace RakNet {
 
@@ -50,15 +52,15 @@ class RAK_DLL_EXPORT RakNetRandom
 public:
 	RakNetRandom();
 	~RakNetRandom();
-	void SeedMT( unsigned int seed );
-	unsigned int ReloadMT( void );
-	unsigned int RandomMT( void );
+	void SeedMT( uint32_t seed );
+	uint32_t ReloadMT( void );
+	uint32_t RandomMT( void );
 	float FrandomMT( void );
-	void FillBufferMT( void *buffer, unsigned int bytes );
+	void FillBufferMT( void *buffer, uint32_t bytes );
 
 protected:
-	unsigned int state[ 624 + 1 ];
-	unsigned int *next;
+	uint32_t state[ 624 + 1 ];
+	uint32_t *next;
 	int left;
 };
 

@@ -40,15 +40,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cstdint>
 #include "Rand.h"
 
 //
-// uint32 must be an unsigned integer type capable of holding at least 32
+// uint32 must be an uint32_teger type capable of holding at least 32
 // bits; exactly 32 should be fastest, but 64 is better on an Alpha with
 // GCC at -O3 optimization so try your options and see what's best for you
 //
 
-//typedef unsigned int uint32;
+//typedef uint32_t uint32;
 
 #define N        (624)       // length of state vector
 #define M        (397)       // a period parameter
@@ -58,28 +59,28 @@
 #define loBits(u)      ((u) & 0x7FFFFFFFU)   // mask  the highest   bit of u
 #define mixBits(u, v)  (hiBit(u)|loBits(v))  // move hi bit of u to hi bit of v
 
-static unsigned int _state[ N + 1 ];     // state vector + 1 extra to not violate ANSI C
-static unsigned int *_next;        // next random value is computed from here
+static uint32_t _state[ N + 1 ];     // state vector + 1 extra to not violate ANSI C
+static uint32_t *_next;        // next random value is computed from here
 static int _left = -1; // can *next++ this many times before reloading
 
 using namespace RakNet;
 
-void seedMT( unsigned int seed, unsigned int *state, unsigned int *&next, int &left );
-unsigned int reloadMT( unsigned int *state, unsigned int *&next, int &left );
-unsigned int randomMT( unsigned int *state, unsigned int *&next, int &left );
-void fillBufferMT( void *buffer, unsigned int bytes, unsigned int *state, unsigned int *&next, int &left );
-float frandomMT( unsigned int *state, unsigned int *&next, int &left );
+void seedMT( uint32_t seed, uint32_t *state, uint32_t *&next, int &left );
+uint32_t reloadMT( uint32_t *state, uint32_t *&next, int &left );
+uint32_t randomMT( uint32_t *state, uint32_t *&next, int &left );
+void fillBufferMT( void *buffer, uint32_t bytes, uint32_t *state, uint32_t *&next, int &left );
+float frandomMT( uint32_t *state, uint32_t *&next, int &left );
 
 // Uses global vars
-void seedMT( unsigned int seed )
+void seedMT( uint32_t seed )
 {
 	seedMT(seed, _state, _next, _left);
 }
-unsigned int reloadMT( void )
+uint32_t reloadMT( void )
 {
 	return reloadMT(_state, _next, _left);
 }
-unsigned int randomMT( void )
+uint32_t randomMT( void )
 {
 	return randomMT(_state, _next, _left);
 }
@@ -87,12 +88,12 @@ float frandomMT( void )
 {
 	return frandomMT(_state, _next, _left);
 }
-void fillBufferMT( void *buffer, unsigned int bytes )
+void fillBufferMT( void *buffer, uint32_t bytes )
 {
 	fillBufferMT(buffer, bytes, _state, _next, _left);
 }
 
-void seedMT( unsigned int seed, unsigned int *state, unsigned int *&next, int &left )   // Defined in cokus_c.c
+void seedMT( uint32_t seed, uint32_t *state, uint32_t *&next, int &left )   // Defined in cokus_c.c
 {
 	(void) next;
 
@@ -142,8 +143,8 @@ void seedMT( unsigned int seed, unsigned int *state, unsigned int *&next, int &l
 	// so-- that's why the only change I made is to restrict to odd seeds.
 	//
 
-	register unsigned int x = ( seed | 1U ) & 0xFFFFFFFFU, *s = state;
-	register int j;
+	uint32_t x = ( seed | 1U ) & 0xFFFFFFFFU, *s = state;
+	int j;
 
 	for ( left = 0, *s++ = x, j = N; --j;
 		*s++ = ( x *= 69069U ) & 0xFFFFFFFFU )
@@ -152,10 +153,10 @@ void seedMT( unsigned int seed, unsigned int *state, unsigned int *&next, int &l
 }
 
 
-unsigned int reloadMT( unsigned int *state, unsigned int *&next, int &left )
+uint32_t reloadMT( uint32_t *state, uint32_t *&next, int &left )
 {
-	register unsigned int * p0 = state, *p2 = state + 2, *pM = state + M, s0, s1;
-	register int j;
+	uint32_t * p0 = state, *p2 = state + 2, *pM = state + M, s0, s1;
+	int j;
 
 	if ( left < -1 )
 		seedMT( 4357U );
@@ -180,9 +181,9 @@ unsigned int reloadMT( unsigned int *state, unsigned int *&next, int &left )
 }
 
 
-unsigned int randomMT( unsigned int *state, unsigned int *&next, int &left )
+uint32_t randomMT( uint32_t *state, uint32_t *&next, int &left )
 {
-	unsigned int y;
+	uint32_t y;
 
 	if ( --left < 0 )
 		return ( reloadMT(state, next, left) );
@@ -201,10 +202,10 @@ unsigned int randomMT( unsigned int *state, unsigned int *&next, int &left )
 	// return(y ^ (y >> 18)) % 32767;
 }
 
-void fillBufferMT( void *buffer, unsigned int bytes, unsigned int *state, unsigned int *&next, int &left )
+void fillBufferMT( void *buffer, uint32_t bytes, uint32_t *state, uint32_t *&next, int &left )
 {
-	unsigned int offset=0;
-	unsigned int r;
+	uint32_t offset=0;
+	uint32_t r;
 	while (bytes-offset>=sizeof(r))
 	{
 		r = randomMT(state, next, left);
@@ -216,7 +217,7 @@ void fillBufferMT( void *buffer, unsigned int bytes, unsigned int *state, unsign
 	memcpy((char*)buffer+offset, &r, bytes-offset);
 }
 
-float frandomMT( unsigned int *state, unsigned int *&next, int &left )
+float frandomMT( uint32_t *state, uint32_t *&next, int &left )
 {
 	return ( float ) ( ( double ) randomMT(state, next, left) / 4294967296.0 );
 }
@@ -227,18 +228,18 @@ RakNetRandom::RakNetRandom()
 RakNetRandom::~RakNetRandom()
 {
 }
-void RakNetRandom::SeedMT( unsigned int seed )
+void RakNetRandom::SeedMT( uint32_t seed )
 {
 	printf("%i\n",seed);
 	seedMT(seed, state, next, left);
 }
 
-unsigned int RakNetRandom::ReloadMT( void )
+uint32_t RakNetRandom::ReloadMT( void )
 {
 	return reloadMT(state, next, left);
 }
 
-unsigned int RakNetRandom::RandomMT( void )
+uint32_t RakNetRandom::RandomMT( void )
 {
 	return randomMT(state, next, left);
 }
@@ -248,7 +249,7 @@ float RakNetRandom::FrandomMT( void )
 	return frandomMT(state, next, left);
 }
 
-void RakNetRandom::FillBufferMT( void *buffer, unsigned int bytes )
+void RakNetRandom::FillBufferMT( void *buffer, uint32_t bytes )
 {
 	fillBufferMT(buffer, bytes, state, next, left);
 }
@@ -265,7 +266,7 @@ seedMT(4357U);
 // print the first 2,002 random numbers seven to a line as an example
 
 for(j=0; j<2002; j++)
-RAKNET_DEBUG_PRINTF(" %10lu%s", (unsigned int) randomMT(), (j%7)==6 ? "\n" : "");
+RAKNET_DEBUG_PRINTF(" %10lu%s", (uint32_t) randomMT(), (j%7)==6 ? "\n" : "");
 
 return(EXIT_SUCCESS);
 }

@@ -28,6 +28,9 @@
 #include "DS_OrderedList.h"
 #include "DS_Queue.h"
 
+#include <cstdint>
+#include <optional>
+
 /// \defgroup REPLICA_MANAGER_GROUP3 ReplicaManager3
 /// \brief Third implementation of object replication
 /// \details
@@ -199,7 +202,7 @@ public:
 	/// \details Returns the number of connections added with ReplicaManager3::PushConnection(), minus the number removed with ReplicaManager3::PopConnection()
 	/// \param[in] worldId Used for multiple worlds. World 0 is created automatically by default. See AddWorld()
 	/// \return The number of registered connections
-	unsigned int GetConnectionCount(WorldId worldId=0) const;
+	uint32_t GetConnectionCount(WorldId worldId=0) const;
 
 	/// \brief Returns a connection pointer previously added with PushConnection()
 	/// \param[in] index An index, from 0 to GetConnectionCount()-1.
@@ -211,13 +214,13 @@ public:
 	/// \param[in] sa The system address of the connection to return
 	/// \param[in] worldId Used for multiple worlds. World 0 is created automatically by default. See AddWorld()
 	/// \return A Connection_RM3 pointer, or 0 if not found
-	Connection_RM3* GetConnectionBySystemAddress(const SystemAddress &sa, WorldId worldId=0) const;
+	std::optional<Connection_RM3*> GetConnectionBySystemAddress(const SystemAddress &sa, WorldId worldId=0) const;
 
 	/// \brief Returns a connection pointer previously added with PushConnection.()
 	/// \param[in] guid The guid of the connection to return
 	/// \param[in] worldId Used for multiple worlds. World 0 is created automatically by default. See AddWorld()
 	/// \return A Connection_RM3 pointer, or 0 if not found
-	Connection_RM3* GetConnectionByGUID(RakNetGUID guid, WorldId worldId=0) const;
+	std::optional<Connection_RM3*> GetConnectionByGUID(RakNetGUID guid, WorldId worldId=0) const;
 
 	/// \param[in] Default ordering channel to use for object creation, destruction, and serializations
 	void SetDefaultOrderingChannel(char def);
@@ -261,11 +264,11 @@ public:
 	/// \details WorldId 0 is created by default. Worlds will not necessarily be in the order added with AddWorld(). Edit RemoveWorld() changing RemoveAtIndexFast() to RemoveAtIndex() to preserve order.
 	/// \param[in] index A value between 0 and GetWorldCount()-1
 	/// \return One of the WorldId values added with AddWorld()
-	WorldId GetWorldIdAtIndex(unsigned int index);
+	WorldId GetWorldIdAtIndex(uint32_t index);
 
 	/// \brief Returns the number of world id specifiers in memory, added with AddWorld() and removed with RemoveWorld()
 	/// \return The number of worlds added
-	unsigned int GetWorldCount(void) const;
+	uint32_t GetWorldCount(void) const;
 
 	/// \details Sets the networkIDManager instance that this plugin relys upon.<BR>
 	/// Uses whatever instance is attached to RakPeerInterface if unset.<BR>
@@ -327,9 +330,9 @@ protected:
 	PluginReceiveResult OnDownloadComplete(Packet *packet, unsigned char *packetData, int packetDataLength, RakNetGUID senderGuid, unsigned char packetDataOffset, WorldId worldId);
 
 	void DeallocReplicaNoBroadcastDestruction(RakNet::Connection_RM3 *connection, RakNet::Replica3 *replica3);
-	RakNet::Connection_RM3 * PopConnection(unsigned int index, WorldId worldId);
+	RakNet::Connection_RM3 * PopConnection(uint32_t index, WorldId worldId);
 	Replica3* GetReplicaByNetworkID(NetworkID networkId, WorldId worldId);
-	unsigned int ReferenceInternal(RakNet::Replica3 *replica3, WorldId worldId);
+	uint32_t ReferenceInternal(RakNet::Replica3 *replica3, WorldId worldId);
 
 	PRO defaultSendParameters;
 	RakNet::Time autoSerializeInterval;
@@ -653,14 +656,14 @@ protected:
 	void OnDereference(Replica3* replica3, ReplicaManager3 *replicaManager);
 	void OnDownloadFromThisSystem(Replica3* replica3, ReplicaManager3 *replicaManager);
 	void OnDownloadFromOtherSystem(Replica3* replica3, ReplicaManager3 *replicaManager);
-	void OnNeverConstruct(unsigned int queryToConstructIdx, ReplicaManager3 *replicaManager);
-	void OnConstructToThisConnection(unsigned int queryToConstructIdx, ReplicaManager3 *replicaManager);
+	void OnNeverConstruct(uint32_t queryToConstructIdx, ReplicaManager3 *replicaManager);
+	void OnConstructToThisConnection(uint32_t queryToConstructIdx, ReplicaManager3 *replicaManager);
 	void OnConstructToThisConnection(Replica3 *replica, ReplicaManager3 *replicaManager);
 	void OnNeverSerialize(LastSerializationResult *lsr, ReplicaManager3 *replicaManager);
-	void OnReplicaAlreadyExists(unsigned int queryToConstructIdx, ReplicaManager3 *replicaManager);
+	void OnReplicaAlreadyExists(uint32_t queryToConstructIdx, ReplicaManager3 *replicaManager);
 	void OnDownloadExisting(Replica3* replica3, ReplicaManager3 *replicaManager);
-	void OnSendDestructionFromQuery(unsigned int queryToDestructIdx, ReplicaManager3 *replicaManager);
-	void OnDoNotQueryDestruction(unsigned int queryToDestructIdx, ReplicaManager3 *replicaManager);
+	void OnSendDestructionFromQuery(uint32_t queryToDestructIdx, ReplicaManager3 *replicaManager);
+	void OnDoNotQueryDestruction(uint32_t queryToDestructIdx, ReplicaManager3 *replicaManager);
 	void ValidateLists(ReplicaManager3 *replicaManager) const;
 	void SendSerializeHeader(RakNet::Replica3 *replica, RakNet::Time timestamp, RakNet::BitStream *bs, WorldId worldId);
 	

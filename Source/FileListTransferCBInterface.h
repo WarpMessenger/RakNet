@@ -18,6 +18,8 @@
 #include "RakMemoryOverride.h"
 #include "FileListNodeContext.h"
 
+#include <cstdint>
+
 #ifdef _MSC_VER
 #pragma warning( push )
 #endif
@@ -35,7 +37,7 @@ public:
 	struct OnFileStruct
 	{
 		/// \brief The index into the set of files, from 0 to numberOfFilesInThisSet
-		unsigned fileIndex;
+		uint32_t fileIndex;
 
 		/// \brief The name of the file
 		char fileName[512];
@@ -79,17 +81,17 @@ public:
 		/// \param[out] onFileStruct General information about this file, such as the filename and the first \a partLength bytes. You do NOT need to save this data yourself. The complete file will arrive normally.
 		OnFileStruct *onFileStruct;
 		/// \param[out] partCount The zero based index into partTotal. The percentage complete done of this file is 100 * (partCount+1)/partTotal
-		unsigned int partCount;
+		uint32_t partCount;
 		/// \param[out] partTotal The total number of parts this file was split into. Each part will be roughly the MTU size, minus the UDP header and RakNet headers
-		unsigned int partTotal;
+		uint32_t partTotal;
 		/// \param[out] dataChunkLength How many bytes long firstDataChunk and iriDataChunk are
-		unsigned int dataChunkLength;
+		uint32_t dataChunkLength;
 		/// \param[out] firstDataChunk The first \a partLength of the final file. If you store identifying information about the file in the first \a partLength bytes, you can read them while the download is taking place. If this hasn't arrived yet, firstDataChunk will be 0
 		char *firstDataChunk;
 		/// \param[out] iriDataChunk If the remote system is sending this file using IncrementalReadInterface, then this is the chunk we just downloaded. It will not exist in memory after this callback. You should either store this to disk, or in memory. If it is 0, then the file is smaller than one chunk, and will be held in memory automatically
 		char *iriDataChunk;
 		/// \param[out] iriWriteOffset Offset in bytes from the start of the file for the data pointed to by iriDataChunk
-		unsigned int iriWriteOffset;
+		uint32_t iriWriteOffset;
 		/// \param[out] Who sent this file
 		SystemAddress senderSystemAddress;
 		/// \param[out] Who sent this file. Not valid when using TCP, only RakPeer (UDP)
