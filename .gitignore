@@ -3,6 +3,7 @@
 [Rr]elease/
 x64/
 .vscode/
+[Oo]ut/
 
 *.opensdf
 *.sdf
