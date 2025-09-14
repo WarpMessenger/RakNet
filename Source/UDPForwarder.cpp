@@ -50,7 +50,8 @@ UDPForwarder::ForwardEntry::~ForwardEntry() {
 UDPForwarder::UDPForwarder()
 {
 #ifdef _WIN32
-	WSAStartupSingleton::AddRef();
+	auto& wsa = WSAStartupSingleton::instance();
+	wsa.addRef();
 #endif
 
 	maxForwardEntries=DEFAULT_MAX_FORWARD_ENTRIES;
@@ -63,7 +64,8 @@ UDPForwarder::~UDPForwarder()
 	Shutdown();
 
 #ifdef _WIN32
-	WSAStartupSingleton::Deref();
+	auto& wsa = WSAStartupSingleton::instance();
+	wsa.release();
 #endif
 }
 void UDPForwarder::Startup(void)

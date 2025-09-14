@@ -31,11 +31,6 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     _CRT_SECURE_NO_DEPRECATE
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/GS->
-    $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/GR->
-)
-
 target_link_options(${PROJECT_NAME} PRIVATE
     $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/NODEFAULTLIB:LIBCD.lib>
     $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/NODEFAULTLIB:LIBCMTD.lib>

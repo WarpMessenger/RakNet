@@ -4,6 +4,7 @@
 x64/
 .vscode/
 [Oo]ut/
+.vs/
 
 *.opensdf
 *.sdf

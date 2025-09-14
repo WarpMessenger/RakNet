@@ -202,7 +202,8 @@ RakPeer::RakPeer()
 	StringCompressor::AddReference();
 	RakNet::StringTable::AddReference();
 #ifdef _WIN32
-	WSAStartupSingleton::addRef();
+	auto& wsa = WSAStartupSingleton::instance();
+	wsa.addRef();
 #endif
 
 	defaultMTUSize = mtuSizes[NUM_MTU_SIZES-1];
@@ -282,7 +283,8 @@ RakPeer::~RakPeer()
 	StringCompressor::RemoveReference();
 	RakNet::StringTable::RemoveReference();
 #ifdef _WIN32
-	WSAStartupSingleton::release();
+	auto& wsa = WSAStartupSingleton::instance();
+	wsa.release();
 #endif
 
 	quitAndDataEvents.CloseEvent();

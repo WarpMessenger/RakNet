@@ -79,14 +79,16 @@ TCPInterface::TCPInterface()
 #endif
 
 #ifdef _WIN32
-	WSAStartupSingleton::AddRef();
+	auto& wsa = WSAStartupSingleton::instance();
+	wsa.addRef();
 #endif
 }
 TCPInterface::~TCPInterface()
 {
 	Stop();
 #ifdef _WIN32
-	WSAStartupSingleton::Deref();
+	auto& wsa = WSAStartupSingleton::instance();
+	wsa.release();
 #endif
 
 	RakNet::OP_DELETE_ARRAY(remoteClients,_FILE_AND_LINE_);
