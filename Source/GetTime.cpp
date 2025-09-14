@@ -13,7 +13,7 @@
 
 
 #if defined(_WIN32)
-#include "WindowsIncludes.h"
+#include <RakNet/WindowsIncludes.h>
 
  #if !defined(WINDOWS_PHONE_8)
 		// To call timeGetTime

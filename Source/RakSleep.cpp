@@ -9,14 +9,7 @@
  */
 
 #if   defined(_WIN32)
-#include "WindowsIncludes.h" // Sleep
-
-
-
-
-
-
-
+#include <RakNet/WindowsIncludes.h> // Sleep
 #else
 #include <pthread.h>
 #include <time.h>

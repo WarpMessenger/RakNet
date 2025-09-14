@@ -8,17 +8,17 @@
  *
  */
 
-#include "../include/RakNet/NativeFeatureIncludes.h"
-#if _RAKNET_SUPPORT_PacketLogger==1
+#include <RakNet/NativeFeatureIncludes.h>
+#if _RAKNET_SUPPORT_PacketLogger == 1
 
 #if defined(UNICODE)
-#include "RakWString.h"
+#include <RakNet/RakWString.h>
 #endif
 
-#include "../include/RakNet/PacketOutputWindowLogger.h"
-#include "../include/RakNet/RakString.h"
+#include <RakNet/PacketOutputWindowLogger.h>
+#include <RakNet/RakString.h>
 #if defined(_WIN32)
-#include "WindowsIncludes.h"
+#include <RakNet/WindowsIncludes.h>
 #endif
 
 using namespace RakNet;

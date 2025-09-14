@@ -12,21 +12,21 @@
 ///
 
 
-#include "../include/RakNet/RakNetTypes.h"
-#include "../include/RakNet/RakAssert.h"
+#include <RakNet/RakNetTypes.h>
+#include <RakNet/RakAssert.h>
 #include <string.h>
 #include <stdio.h>
-#include "../include/RakNet/WindowsIncludes.h"
-#include "../include/RakNet/WSAStartupSingleton.h"
-#include "../include/RakNet/SocketDefines.h"
-#include "../include/RakNet/RakNetSocket2.h"
+#include <RakNet/WindowsIncludes.h>
+#include <RakNet/WSAStartupSingleton.h>
+#include <RakNet/SocketDefines.h>
+#include <RakNet/RakNetSocket2.h>
 
 
 #if   defined(_WIN32)
 // extern __int64 _strtoui64(const char*, char**, int); // needed for Code::Blocks. Does not compile on Visual Studio 2010
 // IP_DONTFRAGMENT is different between winsock 1 and winsock 2.  Therefore, Winsock2.h must be linked againt Ws2_32.lib
 // winsock.h must be linked against WSock32.lib.  If these two are mixed up the flag won't work correctly
-#include "WindowsIncludes.h"
+#include <RakNet/WindowsIncludes.h>
 
 #else
 #include <sys/socket.h>
@@ -35,9 +35,9 @@
 #endif
 
 #include <string.h> // strncasecmp
-#include "../include/RakNet/Itoa.h"
-#include "../include/RakNet/SocketLayer.h"
-#include "../include/RakNet/SuperFastHash.h"
+#include <RakNet/Itoa.h>
+#include <RakNet/SocketLayer.h>
+#include <RakNet/SuperFastHash.h>
 #include <stdlib.h>
 
 using namespace RakNet;

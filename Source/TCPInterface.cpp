@@ -47,7 +47,7 @@
 #endif
 
 #ifdef _WIN32
-#include "WSAStartupSingleton.h"
+#include <RakNet/WSAStartupSingleton.h>
 #endif
 namespace RakNet
 {

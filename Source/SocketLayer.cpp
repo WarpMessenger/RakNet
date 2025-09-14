@@ -13,13 +13,13 @@
 ///
 
 
-#include "../include/RakNet/SocketLayer.h"
-#include "../include/RakNet/RakAssert.h"
-#include "../include/RakNet/RakNetTypes.h"
-#include "../include/RakNet/RakPeer.h"
-#include "../include/RakNet/GetTime.h"
-#include "../include/RakNet/LinuxStrings.h"
-#include "../include/RakNet/SocketDefines.h"
+#include <RakNet/SocketLayer.h>
+#include <RakNet/RakAssert.h>
+#include <RakNet/RakNetTypes.h>
+#include <RakNet/RakPeer.h>
+#include <RakNet/GetTime.h>
+#include <RakNet/LinuxStrings.h>
+#include <RakNet/SocketDefines.h>
 #if (defined(__GNUC__)  || defined(__GCCXML__)) && !defined(__WIN32__)
 #include <netdb.h>
 #endif
@@ -33,9 +33,9 @@ using namespace pp;
 */
 
 #if USE_SLIDING_WINDOW_CONGESTION_CONTROL!=1
-#include "CCRakNetUDT.h"
+#include <RakNet/CCRakNetUDT.h>
 #else
-#include "../include/RakNet/CCRakNetSlidingWindow.h"
+#include <RakNet/CCRakNetSlidingWindow.h>
 #endif
 
 //SocketLayerOverride *SocketLayer::slo=0;
@@ -59,29 +59,17 @@ using namespace pp;
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
-
 #if   defined(_WIN32)
-#include "WSAStartupSingleton.h"
-#include "WindowsIncludes.h"
+#include <RakNet/WSAStartupSingleton.h>
+#include <RakNet/WindowsIncludes.h>
 
 #else
 #include <unistd.h>
 #endif
 
-#include "../include/RakNet/RakSleep.h"
+#include <RakNet/RakSleep.h>
 #include <stdio.h>
-#include "../include/RakNet/Itoa.h"
+#include <RakNet/Itoa.h>
 
 #ifdef _MSC_VER
 #pragma warning( push )
@@ -96,8 +84,6 @@ namespace RakNet
 #ifdef _DEBUG
 #include <stdio.h>
 #endif
-
- 
 
 // http://beej.us/guide/bgnet/output/html/singlepage/bgnet.html#ip4to6
 // http://beej.us/guide/bgnet/output/html/singlepage/bgnet.html#getaddrinfo

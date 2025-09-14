@@ -9,8 +9,9 @@
  */
 
 #include <RakNet/CCRakNetSlidingWindow.h>
+#include <RakNet/MTUSize.h>
 
-#if USE_SLIDING_WINDOW_CONGESTION_CONTROL==1
+#if USE_SLIDING_WINDOW_CONGESTION_CONTROL == 1
 
 static const double UNSET_TIME_US=-1;
 
