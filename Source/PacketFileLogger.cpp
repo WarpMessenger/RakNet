@@ -8,12 +8,13 @@
  *
  */
 
-#include "../include/RakNet/NativeFeatureIncludes.h"
-#if _RAKNET_SUPPORT_PacketLogger==1
-#include "../include/RakNet/PacketFileLogger.h"
-#include "../include/RakNet/GetTime.h"
+#include <RakNet/NativeFeatureIncludes.h>
+#if _RAKNET_SUPPORT_PacketLogger == 1
+#include <RakNet/PacketFileLogger.h>
+#include <RakNet/GetTime.h>
 #include <format>
 #include <string>
+#include <cstring>
 
 using namespace RakNet;
 
