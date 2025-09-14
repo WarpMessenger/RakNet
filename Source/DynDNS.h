@@ -68,7 +68,7 @@ public:
 	// Pass 0 for newIPAddress to autodetect whatever you are uploading from
 	// usernameAndPassword should be in the format username:password
 	void UpdateHostIPAsynch(const char *dnsHost, const char *newIPAddress, const char *usernameAndPassword );
-	void Update(void);
+	void Update();
 
 	// Output
 	bool IsRunning(void) const {return connectPhase!=CP_IDLE;}
@@ -79,7 +79,7 @@ public:
 	char *GetMyPublicIP(void) const {return (char*) myIPStr;} // We get our public IP as part of the process. This is valid once completed
 
 protected:
-	void Stop(void);
+	void Stop();
 	void SetCompleted(RakNet::DynDnsResultCode _result, const char *_resultDescription) {Stop(); result=_result; resultDescription=_resultDescription;}
 
 	enum ConnectPhase

@@ -6,6 +6,9 @@ x64/
 [Oo]ut/
 .vs/
 
+# JetBrains
+.idea/
+
 *.opensdf
 *.sdf
 *.user

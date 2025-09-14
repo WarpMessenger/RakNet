@@ -92,7 +92,7 @@ public:
 	/// All files in the resultant directory and subdirectories are then hashed so that users can download them.
 	/// \pre You must call SetFileListTransferPlugin with a valid FileListTransfer plugin
 	/// \param[in] subdir Concatenated with pathToApplication to form the final path from which to allow uploads.
-	void AddUploadsFromSubdirectory(const char *subdir);
+	void AddUploadsFromSubdirectory(const char *subdir) const;
 
 	/// \brief Downloads files from the matching parameter \a subdir in AddUploadsFromSubdirectory.
 	/// \details \a subdir must contain all starting characters in \a subdir in AddUploadsFromSubdirectory

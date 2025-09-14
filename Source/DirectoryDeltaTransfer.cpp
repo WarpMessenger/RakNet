@@ -37,12 +37,11 @@ public:
 
 	DDTCallback() {}
 	virtual ~DDTCallback() {}
-	
-	virtual bool OnFile(OnFileStruct *onFileStruct)
-	{
+
+	bool OnFile(OnFileStruct *onFileStruct) override {
 		char fullPathToDir[1024];
 
-		if (onFileStruct->fileName && onFileStruct->fileData && subdirLen < strlen(onFileStruct->fileName))
+		if (onFileStruct->fileData && subdirLen < strlen(onFileStruct->fileName))
 		{
 			strcpy(fullPathToDir, outputSubdir);
 			strcat(fullPathToDir, onFileStruct->fileName+subdirLen);
@@ -54,11 +53,10 @@ public:
 		return onFileCallback->OnFile(onFileStruct);
 	}
 
-	virtual void OnFileProgress(FileProgressStruct *fps)
-	{
+	void OnFileProgress(FileProgressStruct *fps) override {
 		char fullPathToDir[1024];
 
-		if (fps->onFileStruct->fileName && subdirLen < strlen(fps->onFileStruct->fileName))
+		if (subdirLen < strlen(fps->onFileStruct->fileName))
 		{
 			strcpy(fullPathToDir, outputSubdir);
 			strcat(fullPathToDir, fps->onFileStruct->fileName+subdirLen);
@@ -68,8 +66,8 @@ public:
 
 		onFileCallback->OnFileProgress(fps);
 	}
-	virtual bool OnDownloadComplete(DownloadCompleteStruct *dcs)
-	{
+
+	bool OnDownloadComplete(DownloadCompleteStruct *dcs) override {
 		return onFileCallback->OnDownloadComplete(dcs);
 	}
 };
@@ -78,12 +76,13 @@ STATIC_FACTORY_DEFINITIONS(DirectoryDeltaTransfer,DirectoryDeltaTransfer);
 
 DirectoryDeltaTransfer::DirectoryDeltaTransfer()
 {
-	applicationDirectory[0]=0;
-	fileListTransfer=0;
+	chunkSize = 0;
+	applicationDirectory[0] = 0;
+	fileListTransfer = nullptr;
 	availableUploads = RakNet::OP_NEW<FileList>( _FILE_AND_LINE_ );
-	priority=HIGH_PRIORITY;
-	orderingChannel=0;
-	incrementalReadInterface=0;
+	priority = HIGH_PRIORITY;
+	orderingChannel = 0;
+	incrementalReadInterface = nullptr;
 }
 DirectoryDeltaTransfer::~DirectoryDeltaTransfer()
 {
@@ -132,23 +131,20 @@ void DirectoryDeltaTransfer::SetUploadSendParameters(PacketPriority _priority, c
 	priority=_priority;
 	orderingChannel=_orderingChannel;
 }
-void DirectoryDeltaTransfer::AddUploadsFromSubdirectory(const char *subdir)
-{
+void DirectoryDeltaTransfer::AddUploadsFromSubdirectory(const char *subdir) const {
 	availableUploads->AddFilesFromDirectory(applicationDirectory, subdir, true, false, true, FileListNodeContext(0,0,0,0));
 }
 unsigned short DirectoryDeltaTransfer::DownloadFromSubdirectory(FileList &localFiles, const char *subdir, const char *outputSubdir, bool prependAppDirToOutputSubdir, SystemAddress host, FileListTransferCBInterface *onFileCallback, PacketPriority _priority, char _orderingChannel, FileListProgress *cb)
 {
 	RakAssert(host!=UNASSIGNED_SYSTEM_ADDRESS);
 
-	DDTCallback *transferCallback;
-
 	localFiles.AddCallback(cb);
 
 	// Prepare the callback data
-	transferCallback = RakNet::OP_NEW<DDTCallback>( _FILE_AND_LINE_ );
+	auto *transferCallback = RakNet::OP_NEW<DDTCallback>(_FILE_AND_LINE_);
 	if (subdir && subdir[0])
 	{
-		transferCallback->subdirLen=(unsigned int)strlen(subdir);
+		transferCallback->subdirLen=static_cast<unsigned int>(strlen(subdir));
 		if (subdir[transferCallback->subdirLen-1]!='/' && subdir[transferCallback->subdirLen-1]!='\\')
 			transferCallback->subdirLen++;
 	}
@@ -165,11 +161,11 @@ unsigned short DirectoryDeltaTransfer::DownloadFromSubdirectory(FileList &localF
 	transferCallback->onFileCallback=onFileCallback;
 
 	// Setup the transfer plugin to get the response to this download request
-	unsigned short setId = fileListTransfer->SetupReceive(transferCallback, true, host);
+	const unsigned short setId = fileListTransfer->SetupReceive(transferCallback, true, host);
 
 	// Send to the host, telling it to process this request
 	RakNet::BitStream outBitstream;
-	outBitstream.Write((MessageID)ID_DDT_DOWNLOAD_REQUEST);
+	outBitstream.Write(static_cast<MessageID>(ID_DDT_DOWNLOAD_REQUEST));
 	outBitstream.Write(setId);
 	StringCompressor::Instance()->EncodeString(subdir, 256, &outBitstream);
 	StringCompressor::Instance()->EncodeString(outputSubdir, 256, &outBitstream);

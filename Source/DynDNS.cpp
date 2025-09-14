@@ -43,32 +43,33 @@ DynDnsResult resultTable[13] =
 	{"This host exists, but does not belong to you", "!yours", RC_NOT_YOURS},
 	{"911", "911", RC_911}
 };
-DynDNS::DynDNS()
-{
-	connectPhase=CP_IDLE;
-	tcp=0;
+
+DynDNS::DynDNS() : tcp(nullptr), phaseTimeout(0), resultDescription(nullptr), result(), myIPStr{} {
+	connectPhase = CP_IDLE;
+	// tcp = nullptr;
 }
+
 DynDNS::~DynDNS()
 {
 	if (tcp)
 		RakNet::OP_DELETE(tcp, _FILE_AND_LINE_);
 }
-void DynDNS::Stop(void)
+void DynDNS::Stop()
 {
 	tcp->Stop();
 	connectPhase = CP_IDLE;
 	RakNet::OP_DELETE(tcp, _FILE_AND_LINE_);
-	tcp=0;
+	tcp = nullptr;
 }
 
-
 // newIPAddress is optional - if left out, DynDNS will use whatever it receives
-void DynDNS::UpdateHostIPAsynch(const char *dnsHost, const char *newIPAddress, const char *usernameAndPassword )
+void DynDNS::UpdateHostIPAsynch(const char *dnsHost, const char *newIPAddress, const char *usernameAndPassword)
 {
 	myIPStr[0]=0;
 
-	if (tcp==0)
+	if (tcp == nullptr)
 		tcp = RakNet::OP_NEW<TCPInterface>(_FILE_AND_LINE_);
+
 	connectPhase = CP_IDLE;
 	host = dnsHost;
 
@@ -93,11 +94,13 @@ void DynDNS::UpdateHostIPAsynch(const char *dnsHost, const char *newIPAddress, c
 	getString+="Host: members.dyndns.org\n";
 	getString+="Authorization: Basic ";
 	char outputData[512];
-	Base64Encoding((const unsigned char*) usernameAndPassword, (int) strlen(usernameAndPassword), outputData);
-	getString+=outputData;
-	getString+="User-Agent: Jenkins Software LLC - PC - 1.0\n\n";
+	Base64Encoding(reinterpret_cast<const unsigned char *>(usernameAndPassword),
+				   static_cast<int>(strlen(usernameAndPassword)), outputData);
+	getString += outputData;
+	getString += "User-Agent: Jenkins Software LLC - PC - 1.0\n\n";
 }
-void DynDNS::Update(void)
+
+void DynDNS::Update()
 {
 	if (connectPhase==CP_IDLE)
 		return;
@@ -145,9 +148,8 @@ void DynDNS::Update(void)
 		{
 			unsigned int i;
 
-			char *result;
-			result=strstr((char*) packet->data, "Connection: close");
-			if (result!=0)
+			char *result = strstr(reinterpret_cast<char *>(packet->data), "Connection: close");
+			if (result != nullptr)
 			{
 				result+=strlen("Connection: close");
 				while (*result && ((*result=='\r') || (*result=='\n') || (*result==' ')) )
@@ -206,20 +208,18 @@ void DynDNS::Update(void)
 			Connection to host lost.
 			*/
 
-			char *result;
-			result=strstr((char*) packet->data, "Current IP Address: ");
-			if (result!=0)
+			if (char *result = strstr(reinterpret_cast<char *>(packet->data), "Current IP Address: "); result != nullptr)
 			{
-				result+=strlen("Current IP Address: ");
+				result += strlen("Current IP Address: ");
 				SystemAddress myIp;
 				myIp.FromString(result);
 				myIp.ToString(false, myIPStr);
 
 				char existingHost[65];
-				existingHost[0]=0;
+				existingHost[0] = 0;
 				// Resolve DNS we are setting. If equal to current then abort
 				RakNetSocket2::DomainNameToIP(host.C_String(), existingHost);
-				if (existingHost && strcmp(existingHost, myIPStr)==0)
+				if (strlen(existingHost) > 0 && strcmp(existingHost, myIPStr) == 0)
 				{
 					// DynDNS considers setting the IP to what it is already set abuse
 					tcp->DeallocatePacket(packet);
