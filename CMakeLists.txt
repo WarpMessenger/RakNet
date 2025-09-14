@@ -20,6 +20,26 @@ target_sources(${PROJECT_NAME} PRIVATE ${ALL_CPP_SRCS} ${ALL_HEADER_SRCS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${RAKNET_INTERNAL_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /W4
+        /permissive-
+        $<$<CONFIG:Debug>:/Od /Zi>
+        $<$<CONFIG:Release>:/O2 /wd4701 /wd4703>
+    )
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Wconversion
+        $<$<CONFIG:Debug>:-O0 -g>
+        $<$<CONFIG:Release>:-O3>
+    )
+endif()
+
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
     $<$<PLATFORM_ID:Windows>:ws2_32.lib>
     $<$<NOT:$<PLATFORM_ID:Windows>>:pthread>
