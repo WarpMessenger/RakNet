@@ -8,7 +8,7 @@
  *
  */
 
-#include "SendToThread.h"
+#include "../include/RakNet/SendToThread.h"
 #ifdef USE_THREADED_SEND
 #include "RakThread.h"
 #include "InternalPacket.h"

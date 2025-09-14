@@ -8,9 +8,9 @@
  *
  */
 
-#include "WSAStartupSingleton.h"
+#include "../include/RakNet/WSAStartupSingleton.h"
 
-#include "RakNetDefines.h"
+#include "../include/RakNet/RakNetDefines.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif

@@ -12,12 +12,13 @@ else()
     add_library(${PROJECT_NAME} STATIC)
 endif()
 
-file(GLOB ALL_HEADER_SRCS CONFIGURE_DEPENDS "${RakNet_SOURCE_DIR}/Source/*.h")
+file(GLOB ALL_HEADER_SRCS CONFIGURE_DEPENDS "${RakNet_SOURCE_DIR}/include/*.h")
 file(GLOB ALL_CPP_SRCS    CONFIGURE_DEPENDS "${RakNet_SOURCE_DIR}/Source/*.cpp")
 
 target_sources(${PROJECT_NAME} PRIVATE ${ALL_CPP_SRCS} ${ALL_HEADER_SRCS})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${RAKNET_INTERNAL_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     $<$<PLATFORM_ID:Windows>:ws2_32.lib>

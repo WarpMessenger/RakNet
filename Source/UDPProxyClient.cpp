@@ -8,15 +8,15 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_UDPProxyClient==1
 
-#include "UDPProxyClient.h"
-#include "BitStream.h"
-#include "UDPProxyCommon.h"
-#include "RakPeerInterface.h"
-#include "MessageIdentifiers.h"
-#include "GetTime.h"
+#include "../include/RakNet/UDPProxyClient.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/UDPProxyCommon.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/MessageIdentifiers.h"
+#include "../include/RakNet/GetTime.h"
 
 using namespace RakNet;
 static const int DEFAULT_UNRESPONSIVE_PING_TIME_COORDINATOR=1000;

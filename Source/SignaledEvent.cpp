@@ -8,9 +8,9 @@
  *
  */
 
-#include "SignaledEvent.h"
-#include "RakAssert.h"
-#include "RakSleep.h"
+#include "../include/RakNet/SignaledEvent.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/RakSleep.h"
 
 #if defined(__GNUC__) 
 #include <sys/time.h>

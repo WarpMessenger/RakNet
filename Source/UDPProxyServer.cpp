@@ -8,14 +8,14 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_UDPProxyServer==1 && _RAKNET_SUPPORT_UDPForwarder==1
 
-#include "UDPProxyServer.h"
-#include "BitStream.h"
-#include "UDPProxyCommon.h"
-#include "RakPeerInterface.h"
-#include "MessageIdentifiers.h"
+#include "../include/RakNet/UDPProxyServer.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/UDPProxyCommon.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/MessageIdentifiers.h"
 
 using namespace RakNet;
 

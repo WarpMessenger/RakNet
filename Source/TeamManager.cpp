@@ -8,13 +8,13 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_TeamManager==1
 
-#include "TeamManager.h"
-#include "BitStream.h"
-#include "MessageIdentifiers.h"
-#include "GetTime.h"
+#include "../include/RakNet/TeamManager.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/MessageIdentifiers.h"
+#include "../include/RakNet/GetTime.h"
 
 using namespace RakNet;
 

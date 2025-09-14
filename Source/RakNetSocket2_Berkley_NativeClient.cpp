@@ -8,7 +8,7 @@
  *
  */
 
-#include "EmptyHeader.h"
+#include <RakNet/EmptyHeader.h>
 
 #ifdef RAKNET_SOCKET_2_INLINE_FUNCTIONS
 
@@ -18,10 +18,9 @@
 // Every platform except windows store 8 and native client supports Berkley sockets
 #if !defined(WINDOWS_STORE_RT)
 
-#include "Itoa.h"
+#include <RakNet/Itoa.h>
 
 // Shared on most platforms, but excluded from the listed
-
 
 void DomainNameToIP_Berkley_IPV4And6( const char *domainName, char ip[65] )
 {

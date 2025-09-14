@@ -8,10 +8,10 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_PacketLogger==1
 
-#include "ThreadsafePacketLogger.h"
+#include "../include/RakNet/ThreadsafePacketLogger.h"
 #include <string.h>
 
 using namespace RakNet;

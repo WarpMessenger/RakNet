@@ -8,24 +8,24 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_EmailSender==1 && _RAKNET_SUPPORT_TCPInterface==1 && _RAKNET_SUPPORT_FileOperations==1
 
 // Useful sites
 // http://www.faqs.org\rfcs\rfc2821.html
 // http://www2.rad.com\networks/1995/mime/examples.htm
 
-#include "EmailSender.h"
-#include "TCPInterface.h"
-#include "GetTime.h"
-#include "Rand.h"
-#include "FileList.h"
-#include "BitStream.h"
-#include "Base64Encoder.h"
+#include "../include/RakNet/EmailSender.h"
+#include "../include/RakNet/TCPInterface.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/Rand.h"
+#include "../include/RakNet/FileList.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/Base64Encoder.h"
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
-#include "RakSleep.h"
+#include "../include/RakNet/RakSleep.h"
 
 using namespace RakNet;
 

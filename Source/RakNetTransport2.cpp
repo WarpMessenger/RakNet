@@ -8,18 +8,18 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_TelnetTransport==1
 
-#include "RakNetTransport2.h"
+#include "../include/RakNet/RakNetTransport2.h"
 
-#include "RakPeerInterface.h"
-#include "BitStream.h"
-#include "MessageIdentifiers.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/MessageIdentifiers.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
-#include "LinuxStrings.h"
+#include "../include/RakNet/LinuxStrings.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )

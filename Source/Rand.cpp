@@ -41,7 +41,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cstdint>
-#include "Rand.h"
+#include "../include/RakNet/Rand.h"
 
 //
 // uint32 must be an uint32_teger type capable of holding at least 32

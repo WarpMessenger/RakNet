@@ -12,14 +12,14 @@
 ///
 
 
-#include "RakNetTypes.h"
-#include "RakAssert.h"
+#include "../include/RakNet/RakNetTypes.h"
+#include "../include/RakNet/RakAssert.h"
 #include <string.h>
 #include <stdio.h>
-#include "WindowsIncludes.h"
-#include "WSAStartupSingleton.h"
-#include "SocketDefines.h"
-#include "RakNetSocket2.h"
+#include "../include/RakNet/WindowsIncludes.h"
+#include "../include/RakNet/WSAStartupSingleton.h"
+#include "../include/RakNet/SocketDefines.h"
+#include "../include/RakNet/RakNetSocket2.h"
 
 
 #if   defined(_WIN32)
@@ -35,9 +35,9 @@
 #endif
 
 #include <string.h> // strncasecmp
-#include "Itoa.h"
-#include "SocketLayer.h"
-#include "SuperFastHash.h"
+#include "../include/RakNet/Itoa.h"
+#include "../include/RakNet/SocketLayer.h"
+#include "../include/RakNet/SuperFastHash.h"
 #include <stdlib.h>
 
 using namespace RakNet;

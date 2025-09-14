@@ -8,7 +8,7 @@
  *
  */
 
-#include "VariableDeltaSerializer.h"
+#include "../include/RakNet/VariableDeltaSerializer.h"
 
 using namespace RakNet;
 

@@ -8,18 +8,18 @@
  *
  */
 
-#include "RakString.h"
-#include "RakAssert.h"
-#include "RakMemoryOverride.h"
-#include "BitStream.h"
+#include "../include/RakNet/RakString.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/RakMemoryOverride.h"
+#include "../include/RakNet/BitStream.h"
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
-#include "LinuxStrings.h"
-#include "StringCompressor.h"
-#include "SimpleMutex.h"
+#include "../include/RakNet/LinuxStrings.h"
+#include "../include/RakNet/StringCompressor.h"
+#include "../include/RakNet/SimpleMutex.h"
 #include <cstdlib>
-#include "Itoa.h"
+#include "../include/RakNet/Itoa.h"
 
 using namespace RakNet;
 

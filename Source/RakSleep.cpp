@@ -25,7 +25,7 @@ pthread_mutex_t fakeMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t fakeCond = PTHREAD_COND_INITIALIZER;
 #endif
 
-#include "RakSleep.h"
+#include "../include/RakNet/RakSleep.h"
 
 
 #if defined(WINDOWS_PHONE_8) || defined(WINDOWS_STORE_RT)

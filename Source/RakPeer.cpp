@@ -15,9 +15,9 @@
 
 #define CAT_NEUTER_EXPORT /* Neuter dllimport for libcat */
 
-#include "RakNetDefines.h"
-#include "RakPeer.h"
-#include "RakNetTypes.h"
+#include "../include/RakNet/RakNetDefines.h"
+#include "../include/RakNet/RakPeer.h"
+#include "../include/RakNet/RakNetTypes.h"
 
 #ifdef _WIN32
 
@@ -34,25 +34,25 @@
 #include <time.h>
 #include <ctype.h> // toupper
 #include <string.h>
-#include "GetTime.h"
-#include "MessageIdentifiers.h"
-#include "DS_HuffmanEncodingTree.h"
-#include "Rand.h"
-#include "PluginInterface2.h"
-#include "StringCompressor.h"
-#include "StringTable.h"
-#include "NetworkIDObject.h"
-#include "RakNetTypes.h"
-#include "DR_SHA1.h"
-#include "RakSleep.h"
-#include "RakAssert.h"
-#include "RakNetVersion.h"
-#include "NetworkIDManager.h"
-#include "gettimeofday.h"
-#include "SignaledEvent.h"
-#include "SuperFastHash.h"
-#include "RakAlloca.h"
-#include "WSAStartupSingleton.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/MessageIdentifiers.h"
+#include "../include/RakNet/DS_HuffmanEncodingTree.h"
+#include "../include/RakNet/Rand.h"
+#include "../include/RakNet/PluginInterface2.h"
+#include "../include/RakNet/StringCompressor.h"
+#include "../include/RakNet/StringTable.h"
+#include "../include/RakNet/NetworkIDObject.h"
+#include "../include/RakNet/RakNetTypes.h"
+#include "../include/RakNet/DR_SHA1.h"
+#include "../include/RakNet/RakSleep.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/RakNetVersion.h"
+#include "../include/RakNet/NetworkIDManager.h"
+#include "../include/RakNet/gettimeofday.h"
+#include "../include/RakNet/SignaledEvent.h"
+#include "../include/RakNet/SuperFastHash.h"
+#include "../include/RakNet/RakAlloca.h"
+#include "../include/RakNet/WSAStartupSingleton.h"
 
 #ifdef USE_THREADED_SEND
 #include "SendToThread.h"

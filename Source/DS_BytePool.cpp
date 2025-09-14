@@ -8,8 +8,8 @@
  *
  */
 
-#include "DS_BytePool.h"
-#include "RakAssert.h"
+#include "../include/RakNet/DS_BytePool.h"
+#include "../include/RakNet/RakAssert.h"
 #ifndef __APPLE__
 // Use stdlib and not malloc for compatibility
 #include <stdlib.h>

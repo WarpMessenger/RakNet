@@ -8,12 +8,12 @@
  *
  */
 
-#include "RakNetSocket2.h"
-#include "RakMemoryOverride.h"
-#include "RakAssert.h"
-#include "RakSleep.h"
-#include "SocketDefines.h"
-#include "GetTime.h"
+#include "../include/RakNet/RakNetSocket2.h"
+#include "../include/RakNet/RakMemoryOverride.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/RakSleep.h"
+#include "../include/RakNet/SocketDefines.h"
+#include "../include/RakNet/GetTime.h"
 #include <stdio.h>
 #include <string.h> // memcpy
 

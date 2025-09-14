@@ -8,8 +8,8 @@
  *
  */
 
-#include "SuperFastHash.h"
-#include "NativeTypes.h"
+#include "../include/RakNet/SuperFastHash.h"
+#include "../include/RakNet/NativeTypes.h"
 #include <stdlib.h>
 
 #if !defined(_WIN32)

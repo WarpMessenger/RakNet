@@ -13,7 +13,7 @@
 * @brief CheckSum implementation from http://www.flounder.com/checksum.htm
 * 
 */
-#include "CheckSum.h"
+#include <RakNet/CheckSum.h>
 
 /****************************************************************************
 *        CheckSum::add
@@ -33,11 +33,11 @@ void CheckSum::Add ( unsigned int value )
 		unsigned char bytes[ 4 ];
 	}
 
-	data;
+	data{};
 	data.value = value;
 
-	for ( unsigned int i = 0; i < sizeof( data.bytes ); i++ )
-		Add ( data.bytes[ i ] )
+	for (unsigned char byte : data.bytes)
+		Add ( byte )
 
 		;
 } // CheckSum::add(unsigned int)
@@ -60,11 +60,11 @@ void CheckSum::Add ( unsigned short value )
 		unsigned char bytes[ 2 ];
 	}
 
-	data;
+	data{};
 	data.value = value;
 
-	for ( unsigned int i = 0; i < sizeof( data.bytes ); i++ )
-		Add ( data.bytes[ i ] )
+	for (unsigned char byte : data.bytes)
+		Add ( byte )
 
 		;
 } // CheckSum::add(unsigned short)
@@ -81,7 +81,7 @@ void CheckSum::Add ( unsigned short value )
 
 void CheckSum::Add ( unsigned char value )
 {
-	unsigned char cipher = (unsigned char)( value ^ ( r >> 8 ) );
+	auto cipher = (unsigned char)( value ^ ( r >> 8 ) );
 	r = ( cipher + r ) * c1 + c2;
 	sum += cipher;
 } // CheckSum::add(unsigned char)

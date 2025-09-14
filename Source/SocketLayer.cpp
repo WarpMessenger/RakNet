@@ -13,13 +13,13 @@
 ///
 
 
-#include "SocketLayer.h"
-#include "RakAssert.h"
-#include "RakNetTypes.h"
-#include "RakPeer.h"
-#include "GetTime.h"
-#include "LinuxStrings.h"
-#include "SocketDefines.h"
+#include "../include/RakNet/SocketLayer.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/RakNetTypes.h"
+#include "../include/RakNet/RakPeer.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/LinuxStrings.h"
+#include "../include/RakNet/SocketDefines.h"
 #if (defined(__GNUC__)  || defined(__GCCXML__)) && !defined(__WIN32__)
 #include <netdb.h>
 #endif
@@ -35,7 +35,7 @@ using namespace pp;
 #if USE_SLIDING_WINDOW_CONGESTION_CONTROL!=1
 #include "CCRakNetUDT.h"
 #else
-#include "CCRakNetSlidingWindow.h"
+#include "../include/RakNet/CCRakNetSlidingWindow.h"
 #endif
 
 //SocketLayerOverride *SocketLayer::slo=0;
@@ -79,9 +79,9 @@ using namespace pp;
 #include <unistd.h>
 #endif
 
-#include "RakSleep.h"
+#include "../include/RakNet/RakSleep.h"
 #include <stdio.h>
-#include "Itoa.h"
+#include "../include/RakNet/Itoa.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )

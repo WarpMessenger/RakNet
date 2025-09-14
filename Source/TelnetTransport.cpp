@@ -8,15 +8,15 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_TelnetTransport==1 && _RAKNET_SUPPORT_TCPInterface==1
 
-#include "TelnetTransport.h"
-#include "TCPInterface.h"
+#include "../include/RakNet/TelnetTransport.h"
+#include "../include/RakNet/TCPInterface.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
-#include "LinuxStrings.h"
+#include "../include/RakNet/LinuxStrings.h"
 
 // #define _PRINTF_DEBUG
 

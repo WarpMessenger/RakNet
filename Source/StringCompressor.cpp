@@ -13,11 +13,11 @@
 
 
 
-#include "StringCompressor.h"
-#include "DS_HuffmanEncodingTree.h"
-#include "BitStream.h"
-#include "RakString.h"
-#include "RakAssert.h"
+#include "../include/RakNet/StringCompressor.h"
+#include "../include/RakNet/DS_HuffmanEncodingTree.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/RakString.h"
+#include "../include/RakNet/RakAssert.h"
 #include <string.h>
 
 #include <memory.h>

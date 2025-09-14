@@ -8,7 +8,7 @@
  *
  */
 
-#include "VariableListDeltaTracker.h"
+#include "../include/RakNet/VariableListDeltaTracker.h"
 
 using namespace RakNet;
 

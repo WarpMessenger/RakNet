@@ -8,18 +8,18 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_Router2==1 && _RAKNET_SUPPORT_UDPForwarder==1
 
-#include "Router2.h"
-#include "RakPeerInterface.h"
-#include "BitStream.h"
-#include "RakNetTime.h"
-#include "GetTime.h"
-#include "DS_OrderedList.h"
-#include "SocketLayer.h"
-#include "FormatString.h"
-#include "SocketDefines.h"
+#include "../include/RakNet/Router2.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/RakNetTime.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/DS_OrderedList.h"
+#include "../include/RakNet/SocketLayer.h"
+#include "../include/RakNet/FormatString.h"
+#include "../include/RakNet/SocketDefines.h"
 
 using namespace RakNet;
 

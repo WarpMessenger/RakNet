@@ -11,12 +11,12 @@
 #ifndef __THREAD_POOL_H
 #define __THREAD_POOL_H
 
-#include "RakMemoryOverride.h"
-#include "DS_Queue.h"
-#include "SimpleMutex.h"
-#include "Export.h"
-#include "RakThread.h"
-#include "SignaledEvent.h"
+#include <RakNet/RakMemoryOverride.h>
+#include <RakNet/DS_Queue.h>
+#include <RakNet/SimpleMutex.h>
+#include <RakNet/Export.h>
+#include <RakNet/RakThread.h>
+#include <RakNet/SignaledEvent.h>
 
 #ifdef _MSC_VER
 #pragma warning( push )

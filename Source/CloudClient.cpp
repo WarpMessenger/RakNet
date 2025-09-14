@@ -8,14 +8,14 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include <RakNet/NativeFeatureIncludes.h>
 #if _RAKNET_SUPPORT_CloudClient==1
 
-#include "CloudClient.h"
-#include "GetTime.h"
-#include "MessageIdentifiers.h"
-#include "BitStream.h"
-#include "RakPeerInterface.h"
+#include <RakNet/CloudClient.h>
+#include <RakNet/GetTime.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <RakNet/BitStream.h>
+#include <RakNet/RakPeerInterface.h>
 
 using namespace RakNet;
 
@@ -23,17 +23,18 @@ STATIC_FACTORY_DEFINITIONS(CloudClient,CloudClient);
 
 CloudClient::CloudClient()
 {
-	callback=0;
+	callback = nullptr;
 	allocator=&unsetDefaultAllocator;
 }
-CloudClient::~CloudClient()
-{
-}
+
+CloudClient::~CloudClient() = default;
+
 void CloudClient::SetDefaultCallbacks(CloudAllocator *_allocator, CloudClientCallback *_callback)
 {
 	callback=_callback;
 	allocator=_allocator;
 }
+
 void CloudClient::Post(CloudKey *cloudKey, const unsigned char *data, uint32_t dataLengthBytes, RakNetGUID systemIdentifier)
 {
 	RakAssert(cloudKey);
@@ -41,13 +42,14 @@ void CloudClient::Post(CloudKey *cloudKey, const unsigned char *data, uint32_t d
 	RakNet::BitStream bsOut;
 	bsOut.Write((MessageID)ID_CLOUD_POST_REQUEST);
 	cloudKey->Serialize(true,&bsOut);
-	if (data==0)
+	if (data==nullptr)
 		dataLengthBytes=0;
 	bsOut.Write(dataLengthBytes);
 	if (dataLengthBytes>0)
 		bsOut.WriteAlignedBytes((const unsigned char*) data, dataLengthBytes);
 	SendUnified(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemIdentifier, false);
 }
+
 void CloudClient::Release(DataStructures::List<CloudKey> &keys, RakNetGUID systemIdentifier)
 {
 	RakNet::BitStream bsOut;
@@ -60,6 +62,7 @@ void CloudClient::Release(DataStructures::List<CloudKey> &keys, RakNetGUID syste
 	}
 	SendUnified(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemIdentifier, false);
 }
+
 bool CloudClient::Get(CloudQuery *keyQuery, RakNetGUID systemIdentifier)
 {
 	RakNet::BitStream bsOut;
@@ -69,6 +72,7 @@ bool CloudClient::Get(CloudQuery *keyQuery, RakNetGUID systemIdentifier)
 	SendUnified(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemIdentifier, false);
 	return true;
 }
+
 bool CloudClient::Get(CloudQuery *keyQuery, DataStructures::List<RakNetGUID> &specificSystems, RakNetGUID systemIdentifier)
 {
 	RakNet::BitStream bsOut;
@@ -83,6 +87,7 @@ bool CloudClient::Get(CloudQuery *keyQuery, DataStructures::List<RakNetGUID> &sp
 	SendUnified(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemIdentifier, false);
 	return true;
 }
+
 bool CloudClient::Get(CloudQuery *keyQuery, DataStructures::List<CloudQueryRow*> &specificSystems, RakNetGUID systemIdentifier)
 {
 	RakNet::BitStream bsOut;
@@ -106,6 +111,7 @@ bool CloudClient::Get(CloudQuery *keyQuery, DataStructures::List<CloudQueryRow*>
 	SendUnified(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemIdentifier, false);
 	return true;
 }
+
 void CloudClient::Unsubscribe(DataStructures::List<CloudKey> &keys, RakNetGUID systemIdentifier)
 {
 	RakNet::BitStream bsOut;
@@ -119,6 +125,7 @@ void CloudClient::Unsubscribe(DataStructures::List<CloudKey> &keys, RakNetGUID s
 	bsOut.WriteCasted<uint16_t>(0);
 	SendUnified(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemIdentifier, false);
 }
+
 void CloudClient::Unsubscribe(DataStructures::List<CloudKey> &keys, DataStructures::List<RakNetGUID> &specificSystems, RakNetGUID systemIdentifier)
 {
 	RakNet::BitStream bsOut;
@@ -137,6 +144,7 @@ void CloudClient::Unsubscribe(DataStructures::List<CloudKey> &keys, DataStructur
 	}
 	SendUnified(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemIdentifier, false);
 }
+
 void CloudClient::Unsubscribe(DataStructures::List<CloudKey> &keys, DataStructures::List<CloudQueryRow*> &specificSystems, RakNetGUID systemIdentifier)
 {
 	RakNet::BitStream bsOut;
@@ -164,17 +172,19 @@ void CloudClient::Unsubscribe(DataStructures::List<CloudKey> &keys, DataStructur
 	}
 	SendUnified(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, systemIdentifier, false);
 }
+
 PluginReceiveResult CloudClient::OnReceive(Packet *packet)
 {
 	(void) packet;
 
 	return RR_CONTINUE_PROCESSING;
 }
-void CloudClient::OnGetReponse(Packet *packet, CloudClientCallback *_callback, CloudAllocator *_allocator)
+
+[[maybe_unused]] void CloudClient::OnGetReponse(Packet *packet, CloudClientCallback *_callback, CloudAllocator *_allocator)
 {
-	if (_callback==0)
+	if (_callback==nullptr)
 		_callback=callback;
-	if (_allocator==0)
+	if (_allocator==nullptr)
 		_allocator=allocator;
 
 	CloudQueryResult cloudQueryResult;
@@ -194,20 +204,22 @@ void CloudClient::OnGetReponse(Packet *packet, CloudClientCallback *_callback, C
 		}
 	}
 }
-void CloudClient::OnGetReponse(CloudQueryResult *cloudQueryResult, Packet *packet, CloudAllocator *_allocator)
+
+[[maybe_unused]] void CloudClient::OnGetReponse(CloudQueryResult *cloudQueryResult, Packet *packet, CloudAllocator *_allocator)
 {
-	if (_allocator==0)
+	if (_allocator==nullptr)
 		_allocator=allocator;
 
 	RakNet::BitStream bsIn(packet->data, packet->length, false);
 	bsIn.IgnoreBytes(sizeof(MessageID));
 	cloudQueryResult->Serialize(false,&bsIn,_allocator);
 }
-void CloudClient::OnSubscriptionNotification(Packet *packet, CloudClientCallback *_callback, CloudAllocator *_allocator)
+
+[[maybe_unused]] void CloudClient::OnSubscriptionNotification(Packet *packet, CloudClientCallback *_callback, CloudAllocator *_allocator)
 {
-	if (_callback==0)
+	if (_callback==nullptr)
 		_callback=callback;
-	if (_allocator==0)
+	if (_allocator==nullptr)
 		_allocator=allocator;
 
 	bool wasUpdated=false;
@@ -224,9 +236,10 @@ void CloudClient::OnSubscriptionNotification(Packet *packet, CloudClientCallback
 		_allocator->DeallocateRowData(row.data);
 	}
 }
-void CloudClient::OnSubscriptionNotification(bool *wasUpdated, CloudQueryRow *row, Packet *packet, CloudAllocator *_allocator)
+
+[[maybe_unused]] void CloudClient::OnSubscriptionNotification(bool *wasUpdated, CloudQueryRow *row, Packet *packet, CloudAllocator *_allocator)
 {
-	if (_allocator==0)
+	if (_allocator==nullptr)
 		_allocator=allocator;
 
 	RakNet::BitStream bsIn(packet->data, packet->length, false);
@@ -236,6 +249,7 @@ void CloudClient::OnSubscriptionNotification(bool *wasUpdated, CloudQueryRow *ro
 	*wasUpdated=b;
 	row->Serialize(false,&bsIn,_allocator);
 }
+
 void CloudClient::DeallocateWithDefaultAllocator(CloudQueryResult *cloudQueryResult)
 {
 	unsigned int i;
@@ -249,8 +263,10 @@ void CloudClient::DeallocateWithDefaultAllocator(CloudQueryResult *cloudQueryRes
 	cloudQueryResult->resultKeyIndices.Clear(false, _FILE_AND_LINE_);
 	cloudQueryResult->cloudQuery.keys.Clear(false, _FILE_AND_LINE_);
 }
+
 void CloudClient::DeallocateWithDefaultAllocator(CloudQueryRow *row)
 {
 	allocator->DeallocateRowData(row->data);
 }
+
 #endif

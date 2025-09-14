@@ -22,9 +22,9 @@
 // https://developer.apple.com/library/mac/#documentation/CoreFOundation/Reference/CFSocketRef/Reference/reference.html
 // Reason: http://sourceforge.net/p/open-dis/discussion/683284/thread/0929d6a0
 #if defined(__APPLE__)
-#import <CoreFoundation/CoreFoundation.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#import "../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h"
+#include "../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/usr/include/sys/socket.h"
+#include "../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk/usr/include/netinet/in.h"
 #endif
 
 // #define TEST_NATIVE_CLIENT_ON_WINDOWS

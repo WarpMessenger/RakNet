@@ -8,7 +8,7 @@
  *
  */
 
-#include "CCRakNetSlidingWindow.h"
+#include <RakNet/CCRakNetSlidingWindow.h>
 
 #if USE_SLIDING_WINDOW_CONGESTION_CONTROL==1
 
@@ -20,12 +20,8 @@ static const CCTimeType SYN=10;
 static const CCTimeType SYN=10000;
 #endif
 
-#include "MTUSize.h"
-#include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
-#include "RakAssert.h"
-#include "RakAlloca.h"
+#include <RakNet/RakAssert.h>
 
 using namespace RakNet;
 
@@ -33,6 +29,7 @@ using namespace RakNet;
 
 CCRakNetSlidingWindow::CCRakNetSlidingWindow()
 {
+
 }
 // ----------------------------------------------------------------------------------------------------------------------------
 CCRakNetSlidingWindow::~CCRakNetSlidingWindow()
@@ -42,34 +39,34 @@ CCRakNetSlidingWindow::~CCRakNetSlidingWindow()
 // ----------------------------------------------------------------------------------------------------------------------------
 void CCRakNetSlidingWindow::Init(CCTimeType curTime, uint32_t maxDatagramPayload)
 {
-	(void) curTime;
+    (void) curTime;
 
-	lastRtt=estimatedRTT=deviationRtt=UNSET_TIME_US;
-	RakAssert(maxDatagramPayload <= MAXIMUM_MTU_SIZE);
-	MAXIMUM_MTU_INCLUDING_UDP_HEADER=maxDatagramPayload;
-	cwnd=maxDatagramPayload;
-	ssThresh=0.0;
-	oldestUnsentAck=0;
-	nextDatagramSequenceNumber=0;
-	nextCongestionControlBlock=0;
-	backoffThisBlock=speedUpThisBlock=false;
-	expectedNextSequenceNumber=0;
-	_isContinuousSend=false;
+    lastRtt=estimatedRTT=deviationRtt=UNSET_TIME_US;
+    RakAssert(maxDatagramPayload <= MAXIMUM_MTU_SIZE);
+    MAXIMUM_MTU_INCLUDING_UDP_HEADER=maxDatagramPayload;
+    cwnd=maxDatagramPayload;
+    ssThresh=0.0;
+    oldestUnsentAck=0;
+    nextDatagramSequenceNumber=0;
+    nextCongestionControlBlock=0;
+    backoffThisBlock=speedUpThisBlock=false;
+    expectedNextSequenceNumber=0;
+    _isContinuousSend=false;
 }
 // ----------------------------------------------------------------------------------------------------------------------------
 void CCRakNetSlidingWindow::Update(CCTimeType curTime, bool hasDataToSendOrResend)
 {
-	(void) curTime;
-	(void) hasDataToSendOrResend;
+    (void) curTime;
+    (void) hasDataToSendOrResend;
 }
 // ----------------------------------------------------------------------------------------------------------------------------
 int CCRakNetSlidingWindow::GetRetransmissionBandwidth(CCTimeType curTime, CCTimeType timeSinceLastTick, uint32_t unacknowledgedBytes, bool isContinuousSend)
 {
-	(void) curTime;
-	(void) isContinuousSend;
-	(void) timeSinceLastTick;
+    (void) curTime;
+    (void) isContinuousSend;
+    (void) timeSinceLastTick;
 
-	return unacknowledgedBytes;
+    return unacknowledgedBytes;
 }
 // ----------------------------------------------------------------------------------------------------------------------------
 int CCRakNetSlidingWindow::GetTransmissionBandwidth(CCTimeType curTime, CCTimeType timeSinceLastTick, uint32_t unacknowledgedBytes, bool isContinuousSend)

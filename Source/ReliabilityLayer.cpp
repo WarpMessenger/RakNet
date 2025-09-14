@@ -13,13 +13,13 @@
 
 
 
-#include "ReliabilityLayer.h"
-#include "GetTime.h"
-#include "SocketLayer.h"
-#include "PluginInterface2.h"
-#include "RakAssert.h"
-#include "Rand.h"
-#include "MessageIdentifiers.h"
+#include "../include/RakNet/ReliabilityLayer.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/SocketLayer.h"
+#include "../include/RakNet/PluginInterface2.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/Rand.h"
+#include "../include/RakNet/MessageIdentifiers.h"
 #ifdef USE_THREADED_SEND
 #include "SendToThread.h"
 #endif

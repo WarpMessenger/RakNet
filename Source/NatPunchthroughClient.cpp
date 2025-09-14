@@ -8,16 +8,16 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_NatPunchthroughClient==1
 
-#include "NatPunchthroughClient.h"
-#include "BitStream.h"
-#include "MessageIdentifiers.h"
-#include "RakPeerInterface.h"
-#include "GetTime.h"
-#include "PacketLogger.h"
-#include "Itoa.h"
+#include "../include/RakNet/NatPunchthroughClient.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/MessageIdentifiers.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/PacketLogger.h"
+#include "../include/RakNet/Itoa.h"
 #include <string>
 
 using namespace RakNet;

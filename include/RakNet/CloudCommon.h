@@ -138,7 +138,7 @@ struct RAK_DLL_EXPORT CloudQueryResult
 	/// \internal
 	void SerializeHeader(bool writeToBitstream, BitStream *bitStream);
 	/// \internal
-	void SerializeNumRows(bool writeToBitstream, uint32_t &numRows, BitStream *bitStream);
+	static void SerializeNumRows(bool writeToBitstream, uint32_t &numRows, BitStream *bitStream);
 	/// \internal
 	void SerializeCloudQueryRows(bool writeToBitstream, uint32_t &numRows, BitStream *bitStream, CloudAllocator *allocator);
 };

@@ -8,12 +8,12 @@
  *
  */
 
-#include "DS_Table.h"
-#include "DS_OrderedList.h"
+#include "../include/RakNet/DS_Table.h"
+#include "../include/RakNet/DS_OrderedList.h"
 #include <string.h>
-#include "RakAssert.h"
-#include "RakAssert.h"
-#include "Itoa.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/Itoa.h"
 #include <string>
 #include <string_view>
 #include <format>

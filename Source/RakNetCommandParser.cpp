@@ -8,14 +8,14 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_RakNetCommandParser==1
 
-#include "RakNetCommandParser.h"
-#include "TransportInterface.h"
-#include "RakPeerInterface.h"
-#include "BitStream.h"
-#include "RakAssert.h"
+#include "../include/RakNet/RakNetCommandParser.h"
+#include "../include/RakNet/TransportInterface.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/RakAssert.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

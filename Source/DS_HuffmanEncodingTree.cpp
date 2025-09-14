@@ -8,10 +8,10 @@
  *
  */
 
-#include "DS_HuffmanEncodingTree.h"
-#include "DS_Queue.h"
-#include "BitStream.h"
-#include "RakAssert.h" 
+#include "../include/RakNet/DS_HuffmanEncodingTree.h"
+#include "../include/RakNet/DS_Queue.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/RakAssert.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )

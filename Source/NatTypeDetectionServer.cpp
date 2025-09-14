@@ -8,18 +8,18 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_NatTypeDetectionServer==1
 
-#include "NatTypeDetectionServer.h"
-#include "SocketLayer.h"
-#include "RakNetSmartPtr.h"
-#include "SocketIncludes.h"
-#include "RakPeerInterface.h"
-#include "MessageIdentifiers.h"
-#include "GetTime.h"
-#include "BitStream.h"
-#include "SocketDefines.h"
+#include "../include/RakNet/NatTypeDetectionServer.h"
+#include "../include/RakNet/SocketLayer.h"
+#include "../include/RakNet/RakNetSmartPtr.h"
+#include "../include/RakNet/SocketIncludes.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/MessageIdentifiers.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/SocketDefines.h"
 
 // #define NTDS_VERBOSE
 

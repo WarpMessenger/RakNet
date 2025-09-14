@@ -8,7 +8,7 @@
  *
  */
 
-#include "EmptyHeader.h"
+#include "../include/RakNet/EmptyHeader.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -101,7 +101,7 @@ public:
 	/// \param[in] packet Packet structure returned from RakPeerInterface
 	/// \param[in] _callback Callback to be called from the function containing output parameters. If 0, default is used.
 	/// \param[in] _allocator Allocator to be used to allocate data. If 0, default is used.
-	virtual void OnGetReponse(Packet *packet, CloudClientCallback *_callback=0, CloudAllocator *_allocator=0);
+        [[maybe_unused]] virtual void OnGetReponse(Packet *packet, CloudClientCallback *_callback=0, CloudAllocator *_allocator=0);
 
 	/// \brief Call this when you get ID_CLOUD_GET_RESPONSE
 	/// Different form of OnGetReponse that returns to a structure that you pass, instead of using a callback
@@ -110,14 +110,14 @@ public:
 	/// \param[out] cloudQueryResult A pointer to a structure that will be filled out with data
 	/// \param[in] packet Packet structure returned from RakPeerInterface
 	/// \param[in] _allocator Allocator to be used to allocate data. If 0, default is used.
-	virtual void OnGetReponse(CloudQueryResult *cloudQueryResult, Packet *packet, CloudAllocator *_allocator=0);
+        [[maybe_unused]] virtual void OnGetReponse(CloudQueryResult *cloudQueryResult, Packet *packet, CloudAllocator *_allocator=0);
 
 	/// \brief Call this when you get ID_CLOUD_SUBSCRIPTION_NOTIFICATION
 	/// If \a callback or \a allocator are 0, the default callbacks passed to SetDefaultCallbacks() are used
 	/// \param[in] packet Packet structure returned from RakPeerInterface
 	/// \param[in] _callback Callback to be called from the function containing output parameters. If 0, default is used.
 	/// \param[in] _allocator Allocator to be used to allocate data. If 0, default is used.
-	virtual void OnSubscriptionNotification(Packet *packet, CloudClientCallback *_callback=0, CloudAllocator *_allocator=0);
+        [[maybe_unused]] virtual void OnSubscriptionNotification(Packet *packet, CloudClientCallback *_callback=0, CloudAllocator *_allocator=0);
 
 	/// \brief Call this when you get ID_CLOUD_SUBSCRIPTION_NOTIFICATION
 	/// Different form of OnSubscriptionNotification that returns to a structure that you pass, instead of using a callback
@@ -127,7 +127,7 @@ public:
 	/// \param[out] row A pointer to a structure that will be filled out with data
 	/// \param[in] packet Packet structure returned from RakPeerInterface
 	/// \param[in] _allocator Allocator to be used to allocate data. If 0, default is used.
-	virtual void OnSubscriptionNotification(bool *wasUpdated, CloudQueryRow *row, Packet *packet, CloudAllocator *_allocator=0);
+        [[maybe_unused]] virtual void OnSubscriptionNotification(bool *wasUpdated, CloudQueryRow *row, Packet *packet, CloudAllocator *_allocator=0);
 
 	/// If you never specified an allocator, and used the non-callback form of OnGetReponse(), deallocate cloudQueryResult with this function
 	virtual void DeallocateWithDefaultAllocator(CloudQueryResult *cloudQueryResult);

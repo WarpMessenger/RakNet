@@ -23,7 +23,7 @@
 
 #endif
 
-#include "GetTime.h"
+#include "../include/RakNet/GetTime.h"
 
 
 

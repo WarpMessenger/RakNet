@@ -8,8 +8,8 @@
  *
  */
 
-#include "RandSync.h"
-#include "BitStream.h"
+#include "../include/RakNet/RandSync.h"
+#include "../include/RakNet/BitStream.h"
 #include <limits>
 #include <limits.h>
 

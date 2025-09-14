@@ -8,19 +8,19 @@
  *
  */
 
-#include "UDPForwarder.h"
+#include "../include/RakNet/UDPForwarder.h"
 
 #if _RAKNET_SUPPORT_UDPForwarder==1
 
-#include "GetTime.h"
-#include "MTUSize.h"
-#include "SocketLayer.h"
-#include "WSAStartupSingleton.h"
-#include "RakSleep.h"
-#include "DS_OrderedList.h"
-#include "LinuxStrings.h"
-#include "SocketDefines.h"
-#include "VitaIncludes.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/MTUSize.h"
+#include "../include/RakNet/SocketLayer.h"
+#include "../include/RakNet/WSAStartupSingleton.h"
+#include "../include/RakNet/RakSleep.h"
+#include "../include/RakNet/DS_OrderedList.h"
+#include "../include/RakNet/LinuxStrings.h"
+#include "../include/RakNet/SocketDefines.h"
+#include "../include/RakNet/VitaIncludes.h"
 #include "errno.h"
 
 #ifndef INVALID_SOCKET

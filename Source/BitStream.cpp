@@ -11,42 +11,25 @@
 /// \file
 ///
 
-
-
-#if defined(_MSC_VER) && _MSC_VER < 1299 // VC6 doesn't support template specialization
-#include "BitStream_NoTemplate.cpp"
-#else
-
-#include "BitStream.h"
-#include <cstring>
-#include <stdlib.h>
+#include <RakNet/BitStream.h>
+#include <cstdlib>
 #include <cstdio>
 #include <cstddef>
 #include <cstdint>
 
-#include "SocketIncludes.h"
-#include "RakNetDefines.h"
-
-
-
 #if   defined(_WIN32)
-#include "WindowsIncludes.h"
+#include <RakNet/WindowsIncludes.h>
 #include <memory.h>
 #include <cmath>
 #include <float.h>
-
-
-
-
 #else
-#include <arpa/inet.h>
 #include <memory.h>
 #if defined(ANDROID)
 #include <math.h>
 #else
 #include <cmath>
 #endif
-#include <float.h>
+#include <cfloat>
 #endif
 
 // MSWin uses _copysign, others use copysign...
@@ -1184,5 +1167,3 @@ void BitStream::WriteFloat16( float inOutFloat, float floatMin, float floatMax )
 #ifdef _MSC_VER
 #pragma warning( pop )
 #endif
-
-#endif // #if _MSC_VER < 1299 

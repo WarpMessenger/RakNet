@@ -12,16 +12,16 @@
 ///
 
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_FullyConnectedMesh2==1
 
-#include "FullyConnectedMesh2.h"
-#include "RakPeerInterface.h"
-#include "MessageIdentifiers.h"
-#include "RakAssert.h"
-#include "GetTime.h"
-#include "Rand.h"
-#include "DS_OrderedList.h"
+#include "../include/RakNet/FullyConnectedMesh2.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/MessageIdentifiers.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/Rand.h"
+#include "../include/RakNet/DS_OrderedList.h"
 
 using namespace RakNet;
 

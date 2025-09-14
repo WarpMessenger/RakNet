@@ -8,9 +8,9 @@
  *
  */
 
-#include "CCRakNetUDT.h"
+#include <RakNet/CCRakNetUDT.h>
 
-#if USE_SLIDING_WINDOW_CONGESTION_CONTROL!=1
+#if USE_SLIDING_WINDOW_CONGESTION_CONTROL != 1
 
 #include "Rand.h"
 #include "MTUSize.h"

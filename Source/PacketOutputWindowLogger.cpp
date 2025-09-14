@@ -8,15 +8,15 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_PacketLogger==1
 
 #if defined(UNICODE)
 #include "RakWString.h"
 #endif
 
-#include "PacketOutputWindowLogger.h"
-#include "RakString.h"
+#include "../include/RakNet/PacketOutputWindowLogger.h"
+#include "../include/RakNet/RakString.h"
 #if defined(_WIN32)
 #include "WindowsIncludes.h"
 #endif

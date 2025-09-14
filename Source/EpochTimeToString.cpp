@@ -8,14 +8,14 @@
  *
  */
 
-#include "FormatString.h"
-#include "EpochTimeToString.h"
+#include "../include/RakNet/FormatString.h"
+#include "../include/RakNet/EpochTimeToString.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
 // localtime
 #include <time.h>
-#include "LinuxStrings.h"
+#include "../include/RakNet/LinuxStrings.h"
 
 char * EpochTimeToString(long long time)
 {

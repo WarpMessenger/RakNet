@@ -8,7 +8,7 @@
  *
  */
 
-#include "DS_ByteQueue.h"
+#include "../include/RakNet/DS_ByteQueue.h"
 #include <string.h> // Memmove
 #include <stdlib.h> // realloc
 #include <stdio.h>

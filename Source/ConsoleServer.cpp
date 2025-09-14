@@ -8,19 +8,19 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_ConsoleServer==1
 
-#include "ConsoleServer.h"
-#include "TransportInterface.h"
-#include "CommandParserInterface.h"
+#include "../include/RakNet/ConsoleServer.h"
+#include "../include/RakNet/TransportInterface.h"
+#include "../include/RakNet/CommandParserInterface.h"
 #include <string.h>
 #include <stdlib.h>
 
 #define COMMAND_DELINATOR ' '
 #define COMMAND_DELINATOR_TOGGLE '"'
 
-#include "LinuxStrings.h"
+#include "../include/RakNet/LinuxStrings.h"
 
 using namespace RakNet;
 

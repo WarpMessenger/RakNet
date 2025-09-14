@@ -8,17 +8,17 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_UDPProxyCoordinator==1 && _RAKNET_SUPPORT_UDPForwarder==1
 
-#include "UDPProxyCoordinator.h"
-#include "BitStream.h"
-#include "UDPProxyCommon.h"
-#include "RakPeerInterface.h"
-#include "MessageIdentifiers.h"
-#include "Rand.h"
-#include "GetTime.h"
-#include "UDPForwarder.h"
+#include "../include/RakNet/UDPProxyCoordinator.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/UDPProxyCommon.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/MessageIdentifiers.h"
+#include "../include/RakNet/Rand.h"
+#include "../include/RakNet/GetTime.h"
+#include "../include/RakNet/UDPForwarder.h"
 
 // Larger than the client version
 static const int DEFAULT_CLIENT_UNRESPONSIVE_PING_TIME=2000;

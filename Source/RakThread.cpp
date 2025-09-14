@@ -8,11 +8,11 @@
  *
  */
 
-#include "RakThread.h"
-#include "RakAssert.h"
-#include "RakNetDefines.h"
-#include "RakSleep.h"
-#include "RakMemoryOverride.h"
+#include "../include/RakNet/RakThread.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/RakNetDefines.h"
+#include "../include/RakNet/RakSleep.h"
+#include "../include/RakNet/RakMemoryOverride.h"
 
 using namespace RakNet;
 

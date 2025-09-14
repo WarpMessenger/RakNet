@@ -8,8 +8,8 @@
  *
  */
 
-#include "VariadicSQLParser.h"
-#include "BitStream.h"
+#include "../include/RakNet/VariadicSQLParser.h"
+#include "../include/RakNet/BitStream.h"
 #include <stdarg.h>
 
 using namespace VariadicSQLParser;

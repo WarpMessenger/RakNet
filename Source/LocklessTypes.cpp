@@ -8,7 +8,7 @@
  *
  */
 
-#include "LocklessTypes.h"
+#include "../include/RakNet/LocklessTypes.h"
 
 using namespace RakNet;
 

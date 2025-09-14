@@ -12,7 +12,7 @@
 ///
 
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 
 #if LIBCAT_SECURITY==1
 

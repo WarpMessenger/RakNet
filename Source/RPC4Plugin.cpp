@@ -8,16 +8,16 @@
  *
  */
 
-#include "NativeFeatureIncludes.h"
+#include "../include/RakNet/NativeFeatureIncludes.h"
 #if _RAKNET_SUPPORT_RPC4Plugin==1
 
-#include "RPC4Plugin.h"
-#include "MessageIdentifiers.h"
-#include "RakPeerInterface.h"
-#include "PacketizedTCP.h"
-#include "RakSleep.h"
-#include "RakNetDefines.h"
-#include "DS_Queue.h"
+#include "../include/RakNet/RPC4Plugin.h"
+#include "../include/RakNet/MessageIdentifiers.h"
+#include "../include/RakNet/RakPeerInterface.h"
+#include "../include/RakNet/PacketizedTCP.h"
+#include "../include/RakNet/RakSleep.h"
+#include "../include/RakNet/RakNetDefines.h"
+#include "../include/RakNet/DS_Queue.h"
 //#include "GetTime.h"
 
 using namespace RakNet;

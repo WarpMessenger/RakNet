@@ -8,11 +8,11 @@
  *
  */
 
-#include "TableSerializer.h"
-#include "DS_Table.h"
-#include "BitStream.h"
-#include "StringCompressor.h"
-#include "RakAssert.h"
+#include "../include/RakNet/TableSerializer.h"
+#include "../include/RakNet/DS_Table.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/StringCompressor.h"
+#include "../include/RakNet/RakAssert.h"
 
 using namespace RakNet;
 

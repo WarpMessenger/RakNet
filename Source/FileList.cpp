@@ -8,12 +8,12 @@
  *
  */
 
-#include "FileList.h"
+#include "../include/RakNet/FileList.h"
 
 #if _RAKNET_SUPPORT_FileOperations==1
 
 #include <stdio.h> // RAKNET_DEBUG_PRINTF
-#include "RakAssert.h"
+#include "../include/RakNet/RakAssert.h"
 #if defined(ANDROID)
 #include <asm/io.h>
 #elif defined(_WIN32) || defined(__CYGWIN__)
@@ -35,13 +35,13 @@
 #endif
 
 //#include "DR_SHA1.h"
-#include "DS_Queue.h"
-#include "StringCompressor.h"
-#include "BitStream.h"
-#include "FileOperations.h"
-#include "SuperFastHash.h"
-#include "RakAssert.h"
-#include "LinuxStrings.h"
+#include "../include/RakNet/DS_Queue.h"
+#include "../include/RakNet/StringCompressor.h"
+#include "../include/RakNet/BitStream.h"
+#include "../include/RakNet/FileOperations.h"
+#include "../include/RakNet/SuperFastHash.h"
+#include "../include/RakNet/RakAssert.h"
+#include "../include/RakNet/LinuxStrings.h"
 
 #define MAX_FILENAME_LENGTH 512
 static const unsigned HASH_LENGTH=4;
@@ -61,11 +61,11 @@ using namespace RakNet;
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include "_FindFirst.h"
+#include "../include/RakNet/_FindFirst.h"
 #include <stdint.h> //defines intptr_t
 #endif
 
-#include "RakAlloca.h"
+#include "../include/RakNet/RakAlloca.h"
 
 //int RAK_DLL_EXPORT FileListNodeComp( char * const &key, const FileListNode &data )
 //{

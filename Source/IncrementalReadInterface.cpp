@@ -8,7 +8,7 @@
  *
  */
 
-#include "IncrementalReadInterface.h"
+#include "../include/RakNet/IncrementalReadInterface.h"
 #include <stdio.h>
 
 using namespace RakNet;
