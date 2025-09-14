@@ -24,6 +24,8 @@
 #include "RakMemoryOverride.h"
 #include "Export.h"
 #include "RakString.h"
+#include <string>
+#include <string_view>
 
 #define _TABLE_BPLUS_TREE_ORDER 16
 #define _TABLE_MAX_COLUMN_NAME_LENGTH 64
@@ -303,7 +305,7 @@ namespace DataStructures
 		/// \param[out] out A pointer to an array of bytes which will hold the output.
 		/// \param[in] outLength The size of the \a out array
 		/// \param[in] columnDelineator What character to print to delineate columns
-		void PrintColumnHeaders(char *out, int outLength, char columnDelineator) const;
+		std::string PrintColumnHeaders(char columnDelineator) const;
 
 		/// \brief Writes a text representation of the row to \a out.
 		/// \param[out] out A pointer to an array of bytes which will hold the output.
@@ -311,7 +313,7 @@ namespace DataStructures
 		/// \param[in] columnDelineator What character to print to delineate columns
 		/// \param[in] printDelineatorForBinary Binary output is not printed.  True to still print the delineator.
 		/// \param[in] inputRow The row to print
-		void PrintRow(char *out, int outLength, char columnDelineator, bool printDelineatorForBinary, Table::Row* inputRow) const;
+    std::string PrintRow(char columnDelineator, bool printDelineatorForBinary, const Table::Row* inputRow) const;
 
 		/// \brief Direct access to make things easier.
 		const DataStructures::List<ColumnDescriptor>& GetColumns(void) const;

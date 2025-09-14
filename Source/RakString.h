@@ -341,8 +341,8 @@ protected:
 	
 	void Clone(void);
 	void Free(void);
-	unsigned char ToLower(unsigned char c);
-	unsigned char ToUpper(unsigned char c);
+	static unsigned char ToLower(unsigned char c);
+	static unsigned char ToUpper(unsigned char c);
 	void Realloc(SharedString *sharedString, size_t bytes);
 };
 

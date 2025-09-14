@@ -14,6 +14,9 @@
 #include "RakAssert.h"
 #include "RakAssert.h"
 #include "Itoa.h"
+#include <string>
+#include <string_view>
+#include <format>
 
 using namespace DataStructures;
 
@@ -934,119 +937,61 @@ void Table::SortTable(Table::SortQuery *sortQueries, unsigned numSortQueries, Ta
 	for (i=0; i < orderedList.Size(); i++)
 		out[(outLength)++]=orderedList[i];
 }
-void Table::PrintColumnHeaders(char *out, int outLength, char columnDelineator) const
+
+std::string Table::PrintColumnHeaders(char columnDelineator) const
 {
-	if (outLength<=0)
-		return;
-	if (outLength==1)
-	{
-		*out=0;
-		return;
-	}
-
-	unsigned i;
-	out[0]=0;
-	int len;
-	for (i=0; i < columns.Size(); i++)
-	{
-		if (i!=0)
-		{
-			len = (int) strlen(out);
-			if (len < outLength-1)
-				sprintf(out+len, "%c", columnDelineator);
-			else
-				return;
-		}
-
-		len = (int) strlen(out);
-		if (len < outLength-(int) strlen(columns[i].columnName))
-			sprintf(out+len, "%s", columns[i].columnName);
-		else
-			return;
-	}
+    std::string out;
+    for(size_t i = 0; i < columns.Size(); ++i){
+        if(i) out.push_back(columnDelineator);
+        std::string_view name = columns[i].columnName;
+        out.append(name.data(), name.size());
+    }
+    return out;
 }
-void Table::PrintRow(char *out, int outLength, char columnDelineator, bool printDelineatorForBinary, Table::Row* inputRow) const
+
+std::string Table::PrintRow(char columnDelineator,
+                            bool printDelineatorForBinary,
+                            const Table::Row* inputRow) const
 {
-	if (outLength<=0)
-		return;
-	if (outLength==1)
-	{
-		*out=0;
-		return;
-	}
+    if (inputRow->cells.Size() != columns.Size()) {
+        return "Cell width does not match column width.\n";
+    }
 
-	if (inputRow->cells.Size()!=columns.Size())
-	{
-		strncpy(out, "Cell width does not match column width.\n", outLength);
-		out[outLength-1]=0;
-		return;
-	}
+    const unsigned n = columns.Size();
+    std::string out;
+    out.reserve(n * 8);
 
-	char buff[512];
-	unsigned i;
-	int len;
-	out[0]=0;
-	for (i=0; i < columns.Size(); i++)
-	{
-        if (columns[i].columnType==NUMERIC)
-		{
-			if (inputRow->cells[i]->isEmpty==false)
-			{
-				sprintf(buff, "%f", inputRow->cells[i]->i);
-				len=(int)strlen(buff);
-			}
-			else
-				len=0;
-			if (i+1!=columns.Size())
-				buff[len++]=columnDelineator;
-			buff[len]=0;
-		}
-		else if (columns[i].columnType==STRING)
-		{
-			if (inputRow->cells[i]->isEmpty==false && inputRow->cells[i]->c)
-			{
-				strncpy(buff, inputRow->cells[i]->c, 512-2);
-				buff[512-2]=0;
-				len=(int)strlen(buff);
-			}
-			else
-				len=0;
-			if (i+1!=columns.Size())
-				buff[len++]=columnDelineator;
-			buff[len]=0;
-		}
-		else if (columns[i].columnType==POINTER)
-		{
-			if (inputRow->cells[i]->isEmpty==false && inputRow->cells[i]->ptr)
-			{
-				sprintf(buff, "%p", inputRow->cells[i]->ptr);
-				len=(int)strlen(buff);
-			}
-			else
-				len=0;
-			if (i+1!=columns.Size())
-				buff[len++]=columnDelineator;
-			buff[len]=0;
-		}
-		else
-		{
-			if (printDelineatorForBinary)
-			{
-				if (i+1!=columns.Size())
-					buff[0]=columnDelineator;
-				buff[1]=0;
-			}
-			else
-				buff[0]=0;
+    for (size_t i = 0; i < n; ++i) {
+        const auto& col  = columns[i];
+        const auto* cell = inputRow->cells[i];
 
-		}
+        if (col.columnType == NUMERIC) {
+            if (!cell->isEmpty) {
+                out += std::format("{:.6f}", cell->i);
+            }
+        } else if (col.columnType == STRING) {
+            if (!cell->isEmpty && cell->c) {
+                out.append(cell->c);
+            }
+        } else if (col.columnType == POINTER) {
+            if (!cell->isEmpty && cell->ptr) {
+                out += std::format("{:p}", cell->ptr);
+            }
+        } else {
+            //
+        }
 
-		len=(int)strlen(out);
-		if (outLength==len+1)
-			break;
-		strncpy(out+len, buff, outLength-len);
-		out[outLength-1]=0;
-	}
+        if (i + 1 != n) {
+            const bool isBinary = !(col.columnType == NUMERIC ||
+                                    col.columnType == STRING  ||
+                                    col.columnType == POINTER);
+            if (!isBinary || printDelineatorForBinary) {
+                out.push_back(columnDelineator);
+            }
+        }
+    }
+
+    return out;
 }
 
 void Table::Clear(void)

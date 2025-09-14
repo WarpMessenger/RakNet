@@ -16,10 +16,10 @@
 
 
 #ifndef __LIST_H
-#define __LIST_H 
+#define __LIST_H
 
 #include "RakAssert.h"
-#include <string.h> // memmove
+#include <cstring> // memmove
 #include "Export.h"
 #include "RakMemoryOverride.h"
 
@@ -52,12 +52,12 @@ namespace DataStructures
 		/// \brief Access an element by its index in the array.
 		/// \param[in]  position The index into the array. 
 		/// \return The element at position \a position. 
-		list_type& operator[] ( const unsigned int position ) const;
+		list_type& operator[] ( unsigned int position ) const;
 
 		/// \brief Access an element by its index in the array.
 		/// \param[in]  position The index into the array. 
 		/// \return The element at position \a position. 
-		list_type& Get ( const unsigned int position ) const;
+		list_type& Get ( unsigned int position ) const;
 
 		/// \brief Push an element at the end of the stack.
 		/// \param[in] input The new element. 
@@ -71,7 +71,7 @@ namespace DataStructures
 		/// \brief Insert an element at position \a position in the list.
 		/// \param[in] input The new element. 
 		/// \param[in] position The position of the new element. 		
-		void Insert( const list_type &input, const unsigned int position, const char *file, unsigned int line );
+		void Insert( const list_type &input, unsigned int position, const char *file, unsigned int line );
 		
 		/// \brief Insert at the end of the list.
 		/// \param[in] input The new element. 
@@ -83,7 +83,7 @@ namespace DataStructures
 		/// \param[in] input The element to replace at position @em position. 
 		/// \param[in] filler The element use to fill new allocated capacity. 
 		/// \param[in] position The position of input in the list. 		
-		void Replace( const list_type &input, const list_type filler, const unsigned int position, const char *file, unsigned int line );
+		void Replace( const list_type &input, list_type filler, unsigned int position, const char *file, unsigned int line );
 		
 		/// \brief Replace the last element of the list by \a input.
 		/// \param[in] input The element used to replace the last element. 
@@ -91,15 +91,15 @@ namespace DataStructures
 		
 		/// \brief Delete the element at position \a position. 
 		/// \param[in] position The index of the element to delete 
-		void RemoveAtIndex( const unsigned int position );
+		void RemoveAtIndex( unsigned int position );
 
 		/// \brief Delete the element at position \a position.
 		/// \note - swaps middle with end of list, only use if list order does not matter
 		/// \param[in] position The index of the element to delete 
-		void RemoveAtIndexFast( const unsigned int position );
+		void RemoveAtIndexFast( unsigned int position );
 		
 		/// \brief Delete the element at the end of the list.
-		void RemoveFromEnd(const unsigned num=1);
+		void RemoveFromEnd( unsigned num = 1 );
 		
 		/// \brief Returns the index of the specified item or MAX_UNSIGNED_LONG if not found.
 		/// \param[in] input The element to check for 
@@ -109,7 +109,7 @@ namespace DataStructures
 		unsigned int GetIndexOf( const list_type &input ) const;
 		
 		/// \return The number of elements in the list
-		unsigned int Size( void ) const;
+		[[nodiscard]] unsigned int Size( ) const;
 		
 		/// \brief Clear the list		
 		void Clear( bool doNotDeallocateSmallBlocks, const char *file, unsigned int line );
@@ -267,7 +267,7 @@ namespace DataStructures
 				new_array[ counter ] = listArray[ counter ];
 
 			// Don't call constructors, assignment operators, etc.
-			//memcpy(new_array, listArray, list_size*sizeof(list_type));
+			// memcpy(new_array, listArray, list_size*sizeof(list_type));
 
 			// set old array to point to the newly allocated and twice as large array
 			RakNet::OP_DELETE_ARRAY(listArray, file, line);
@@ -353,7 +353,7 @@ namespace DataStructures
 					new_array[ counter ] = listArray[ counter ];
 
 				// Don't call constructors, assignment operators, etc.
-				//memcpy(new_array, listArray, list_size*sizeof(list_type));
+				// memcpy(new_array, listArray, list_size*sizeof(list_type));
 
 				// set old array to point to the newly allocated array
 				RakNet::OP_DELETE_ARRAY(listArray, file, line);
@@ -369,11 +369,8 @@ namespace DataStructures
 			listArray[ list_size++ ] = input;
 
 #ifdef _DEBUG
-
 			RakAssert( list_size == position + 1 );
-
 #endif
-
 		}
 	}
 
@@ -453,7 +450,7 @@ namespace DataStructures
 		if ( allocation_size == 0 )
 			return;
 
-		if (allocation_size>512 || doNotDeallocateSmallBlocks==false)
+		if (allocation_size>512 || !doNotDeallocateSmallBlocks)
 		{
 			RakNet::OP_DELETE_ARRAY(listArray, file, line);
 			allocation_size = 0;
@@ -477,7 +474,7 @@ namespace DataStructures
 			new_array[ counter ] = listArray[ counter ];
 
 		// Don't call constructors, assignment operators, etc.
-		//memcpy(new_array, listArray, list_size*sizeof(list_type));
+		// memcpy(new_array, listArray, list_size*sizeof(list_type));
 
 		// set old array to point to the newly allocated array
 		RakNet::OP_DELETE_ARRAY(listArray, file, line);
@@ -499,7 +496,7 @@ namespace DataStructures
 			// allocate twice the currently allocated memory
 			list_type * new_array;
 
-			allocation_size=amountToAllocate;
+			allocation_size = amountToAllocate;
 
 			new_array = RakNet::OP_NEW_ARRAY< list_type >( allocation_size , file, line );
 
@@ -510,7 +507,7 @@ namespace DataStructures
 					new_array[ counter ] = listArray[ counter ];
 
 				// Don't call constructors, assignment operators, etc.
-				//memcpy(new_array, listArray, list_size*sizeof(list_type));
+				// memcpy(new_array, listArray, list_size*sizeof(list_type));
 
 				// set old array to point to the newly allocated and twice as large array
 				RakNet::OP_DELETE_ARRAY(listArray, file, line);

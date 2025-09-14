@@ -12,12 +12,13 @@
 #include "RakAssert.h"
 #include "RakMemoryOverride.h"
 #include "BitStream.h"
-#include <stdarg.h>
-#include <string.h>
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
 #include "LinuxStrings.h"
 #include "StringCompressor.h"
 #include "SimpleMutex.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include "Itoa.h"
 
 using namespace RakNet;
@@ -1274,6 +1275,7 @@ bool RakString::DeserializeCompressed(BitStream *bs, bool readLanguageId)
 		languageId=0;
 	return StringCompressor::Instance()->DecodeString(this,0xFFFF,bs,languageId);
 }
+
 bool RakString::DeserializeCompressed(char *str, BitStream *bs, bool readLanguageId)
 {
 	uint8_t languageId;
@@ -1283,6 +1285,7 @@ bool RakString::DeserializeCompressed(char *str, BitStream *bs, bool readLanguag
 		languageId=0;
 	return StringCompressor::Instance()->DecodeString(str,0xFFFF,bs,languageId);
 }
+
 const char *RakString::ToString(int64_t i)
 {
 	static int index=0;
@@ -1290,13 +1293,14 @@ const char *RakString::ToString(int64_t i)
 #if defined(_WIN32)
 	sprintf(buff[index], "%I64d", i);
 #else
-	sprintf(buff[index], "%lld", (long long unsigned int) i);
+	std::snprintf(buff[index], 64, "%lld", (long long unsigned int) i);
 #endif
-	int lastIndex=index;
-	if (++index==64)
+	int lastIndex = index;
+	if (++index == 64)
 		index=0;
 	return buff[lastIndex];
 }
+
 const char *RakString::ToString(uint64_t i)
 {
 	static int index=0;
@@ -1304,17 +1308,19 @@ const char *RakString::ToString(uint64_t i)
 #if defined(_WIN32)
 	sprintf(buff[index], "%I64u", i);
 #else
-	sprintf(buff[index], "%llu", (long long unsigned int) i);
+	std::snprintf(buff[index], 64, "%llu", static_cast<long long unsigned int>(i));
 #endif
 	int lastIndex=index;
 	if (++index==64)
 		index=0;
 	return buff[lastIndex];
 }
-void RakString::Clear(void)
+
+void RakString::Clear()
 {
 	Free();
 }
+
 void RakString::Allocate(size_t len)
 {
 	RakString::LockMutex();
@@ -1348,16 +1354,16 @@ void RakString::Allocate(size_t len)
 	}
 	else
 	{
-		sharedString->bytesUsed=len<<1;
-		sharedString->bigString=(char*)rakMalloc_Ex(sharedString->bytesUsed, _FILE_AND_LINE_);
+		sharedString->bytesUsed = len << 1;
+		sharedString->bigString = (char*)rakMalloc_Ex(sharedString->bytesUsed, _FILE_AND_LINE_);
 		sharedString->c_str=sharedString->bigString;
 	}
 }
 void RakString::Assign(const char *str)
 {
-	if (str==0 || str[0]==0)
+	if (str == nullptr || str[0] == 0)
 	{
-		sharedString=&emptyString;
+		sharedString = &emptyString;
 		return;
 	}
 
@@ -1365,9 +1371,10 @@ void RakString::Assign(const char *str)
 	Allocate(len);
 	memcpy(sharedString->c_str, str, len);
 }
+
 void RakString::Assign(const char *str, va_list ap)
 {
-	if (str==0 || str[0]==0)
+	if (str==nullptr || str[0]==0)
 	{
 		sharedString=&emptyString;
 		return;
@@ -1384,15 +1391,15 @@ void RakString::Assign(const char *str, va_list ap)
 		Assign(stackBuff);
 		return;
 	}
-	char *buff=0, *newBuff;
-	size_t buffSize=8096;
-	while (1)
+	char* buff = nullptr, *newBuff;
+	size_t buffSize = 8096;
+	while (true)
 	{
 		newBuff = (char*) rakRealloc_Ex(buff, buffSize,__FILE__,__LINE__);
-		if (newBuff==0)
+		if (newBuff == nullptr)
 		{
 			notifyOutOfMemory(_FILE_AND_LINE_);
-			if (buff!=0)
+			if (buff != nullptr)
 			{
 				Assign(buff);
 				rakFree_Ex(buff,__FILE__,__LINE__);
@@ -1413,6 +1420,7 @@ void RakString::Assign(const char *str, va_list ap)
 		buffSize*=2;
 	}
 }
+
 RakNet::RakString RakString::Assign(const char *str,size_t pos, size_t n )
 {
 	size_t incomingLen=strlen(str);
@@ -1446,6 +1454,7 @@ RakNet::RakString RakString::NonVariadic(const char *str)
 	rs=str;
 	return rs;
 }
+
 unsigned long RakString::ToInteger(const char *str)
 {
 	unsigned long hash = 0;
@@ -1456,10 +1465,12 @@ unsigned long RakString::ToInteger(const char *str)
 
 	return hash;
 }
+
 unsigned long RakString::ToInteger(const RakString &rs)
 {
 	return RakString::ToInteger(rs.C_String());
 }
+
 int RakString::ReadIntFromSubstring(const char *str, size_t pos, size_t n)
 {
 	char tmp[32];
@@ -1469,6 +1480,7 @@ int RakString::ReadIntFromSubstring(const char *str, size_t pos, size_t n)
 		tmp[i]=str[i+pos];
 	return atoi(tmp);
 }
+
 void RakString::AppendBytes(const char *bytes, unsigned int count)
 {
 	if (IsEmpty())
@@ -1480,15 +1492,14 @@ void RakString::AppendBytes(const char *bytes, unsigned int count)
 	else
 	{
 		Clone();
-		unsigned int length=(unsigned int) GetLength();
+		auto length = static_cast<unsigned int>(GetLength());
 		Realloc(sharedString, count+length+1);
 		memcpy(sharedString->c_str+length, bytes, count);
 		sharedString->c_str[length+count]=0;
 	}
-
-	
 }
-void RakString::Clone(void)
+
+void RakString::Clone()
 {
 	RakAssert(sharedString!=&emptyString);
 	if (sharedString==&emptyString)
@@ -1508,7 +1519,8 @@ void RakString::Clone(void)
 	sharedString->refCountMutex->Unlock();
 	Assign(sharedString->c_str);
 }
-void RakString::Free(void)
+
+void RakString::Free()
 {
 	if (sharedString==&emptyString)
 		return;
@@ -1538,23 +1550,27 @@ void RakString::Free(void)
 	}
 	sharedString=&emptyString;
 }
+
 unsigned char RakString::ToLower(unsigned char c)
 {
 	if (c >= 'A' && c <= 'Z')
 		return c-'A'+'a';
 	return c;
 }
+
 unsigned char RakString::ToUpper(unsigned char c)
 {
 	if (c >= 'a' && c <= 'z')
 		return c-'a'+'A';
 	return c;
 }
-void RakString::LockMutex(void)
+
+void RakString::LockMutex()
 {
 	GetPoolMutex().Lock();
 }
-void RakString::UnlockMutex(void)
+
+void RakString::UnlockMutex()
 {
 	GetPoolMutex().Unlock();
 }

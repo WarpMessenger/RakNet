@@ -785,27 +785,23 @@ void RakNetGUID::ToString(char *dest) const
 		strcpy(dest, "UNASSIGNED_RAKNET_GUID");
 	else
 		//sprintf(dest, "%u.%u.%u.%u.%u.%u", g[0], g[1], g[2], g[3], g[4], g[5]);
-		sprintf(dest, "%" PRINTF_64_BIT_MODIFIER "u", (long long unsigned int) g);
+		std::snprintf(dest, sizeof(dest), "%" PRINTF_64_BIT_MODIFIER "u", static_cast<long long unsigned int>(g));
 		// sprintf(dest, "%u.%u.%u.%u.%u.%u", g[0], g[1], g[2], g[3], g[4], g[5]);
 }
 bool RakNetGUID::FromString(const char *source)
 {
-	if (source==0)
+	if (source == nullptr)
 		return false;
-
-
 
 #if   defined(WIN32)
 	g=_strtoui64(source, NULL, 10);
-
-
 #else
 	// Changed from g=strtoull(source,0,10); for android
-	g=strtoull(source, (char **)NULL, 10);
+	g = strtoull(source, (char **)NULL, 10);
 #endif
 	return true;
-
 }
+
 unsigned long RakNetGUID::ToUint32( const RakNetGUID &g )
 {
 	return ((unsigned long) (g.g >> 32)) ^ ((unsigned long) (g.g & 0xFFFFFFFF));

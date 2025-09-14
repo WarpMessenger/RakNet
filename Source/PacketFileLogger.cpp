@@ -12,6 +12,8 @@
 #if _RAKNET_SUPPORT_PacketLogger==1
 #include "PacketFileLogger.h"
 #include "GetTime.h"
+#include <format>
+#include <string>
 
 using namespace RakNet;
 
@@ -29,18 +31,19 @@ PacketFileLogger::~PacketFileLogger()
 }
 void PacketFileLogger::StartLog(const char *filenamePrefix)
 {
-	// Open file for writing
-	char filename[256];
-	if (filenamePrefix)
-		sprintf(filename, "%s_%i.csv", filenamePrefix, (int) RakNet::GetTimeMS());
-	else
-		sprintf(filename, "PacketLog_%i.csv", (int) RakNet::GetTimeMS());
-	packetLogFile = fopen(filename, "wt");
-	LogHeader();
-	if (packetLogFile)
-	{
-		fflush(packetLogFile);
-	}
+    // Open file for writing
+    std::string filename;
+    if (strlen(filenamePrefix) > 0)
+        filename = std::format("{}_{}.csv", filenamePrefix, static_cast<int>(RakNet::GetTimeMS()));
+    else
+        filename = std::format("PacketLog_{}.csv", static_cast<int>(RakNet::GetTimeMS()));
+
+    packetLogFile = fopen(filename.c_str(), "wt");
+    LogHeader();
+    if (packetLogFile)
+    {
+        fflush(packetLogFile);
+    }
 }
 
 void PacketFileLogger::WriteLog(const char *str)

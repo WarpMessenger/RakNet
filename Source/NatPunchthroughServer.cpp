@@ -19,6 +19,8 @@
 #include "MTUSize.h"
 #include "GetTime.h"
 #include "PacketLogger.h"
+#include <string>
+#include <format>
 
 using namespace RakNet;
 
@@ -192,21 +194,20 @@ void NatPunchthroughServer::Update(void)
 						connectionAttempt->recipient->isReady=true;
 						recipient=connectionAttempt->recipient;
 
-
 						if (natPunchthroughServerDebugInterface)
 						{
-							char str[1024];
 							char addr1[128], addr2[128];
 							// 8/01/09 Fixed bug where this was after DeleteConnectionAttempt()
 							connectionAttempt->sender->systemAddress.ToString(true,addr1);
 							connectionAttempt->recipient->systemAddress.ToString(true,addr2);
-							sprintf(str, "Sending ID_NAT_TARGET_UNRESPONSIVE to sender %s and recipient %s.", addr1, addr2);
-							natPunchthroughServerDebugInterface->OnServerMessage(str);
+              const std::string str =
+                      std::format("Sending ID_NAT_TARGET_UNRESPONSIVE to sender {} and recipient {}.",
+                                  addr1, addr2);
+							natPunchthroughServerDebugInterface->OnServerMessage(str.c_str());
 							RakNet::RakString log;
 							connectionAttempt->sender->LogConnectionAttempts(log);
 							connectionAttempt->recipient->LogConnectionAttempts(log);
 						}
-
 
 						connectionAttempt->sender->DerefConnectionAttempt(connectionAttempt);
 						connectionAttempt->recipient->DeleteConnectionAttempt(connectionAttempt);
@@ -564,6 +565,7 @@ void NatPunchthroughServer::OnGetMostRecentPort(Packet *packet)
 
 	}
 }
+
 void NatPunchthroughServer::StartPunchthroughForUser(User *user)
 {
 	if (user->isReady==false)
@@ -590,15 +592,17 @@ void NatPunchthroughServer::StartPunchthroughForUser(User *user)
 
 		if (otherUser->isReady)
 		{
-			if (natPunchthroughServerDebugInterface)
-			{
-				char str[1024];
-				char addr1[128], addr2[128];
-				sender->systemAddress.ToString(true,addr1);
-				recipient->systemAddress.ToString(true,addr2);
-				sprintf(str, "Sending NAT_ATTEMPT_PHASE_GETTING_RECENT_PORTS to sender %s and recipient %s.", addr1, addr2);
-				natPunchthroughServerDebugInterface->OnServerMessage(str);
-			}
+      if (natPunchthroughServerDebugInterface)
+      {
+        char str[1024];
+        char addr1[128], addr2[128];
+        sender->systemAddress.ToString(true, addr1);
+        recipient->systemAddress.ToString(true, addr2);
+        std::snprintf(str, sizeof(str),
+                      "Sending NAT_ATTEMPT_PHASE_GETTING_RECENT_PORTS to sender %s and recipient %s.",
+                      addr1, addr2);
+        natPunchthroughServerDebugInterface->OnServerMessage(str);
+      }
 
 			sender->isReady=false;
 			recipient->isReady=false;

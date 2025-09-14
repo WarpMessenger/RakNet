@@ -495,23 +495,23 @@ namespace RakNet
 		/// \attention
 		/// \details Dangerous if you don't know what you are doing!
 		/// For efficiency reasons you can only write mid-stream if your data is byte aligned.
-		void SetWriteOffset( const BitSize_t offset );
+		void SetWriteOffset( BitSize_t offset );
 
 		/// \brief Returns the length in bits of the stream
-		inline BitSize_t GetNumberOfBitsUsed( void ) const {return GetWriteOffset();}
-		inline BitSize_t GetWriteOffset( void ) const {return numberOfBitsUsed;}
+		inline BitSize_t GetNumberOfBitsUsed( ) const {return GetWriteOffset();}
+		inline BitSize_t GetWriteOffset( ) const {return numberOfBitsUsed;}
 
 		/// \brief Returns the length in bytes of the stream
-		inline BitSize_t GetNumberOfBytesUsed( void ) const {return BITS_TO_BYTES( numberOfBitsUsed );}
+		inline BitSize_t GetNumberOfBytesUsed( ) const {return BITS_TO_BYTES( numberOfBitsUsed );}
 
 		/// \brief Returns the number of bits into the stream that we have read
-		inline BitSize_t GetReadOffset( void ) const {return readOffset;}
+		inline BitSize_t GetReadOffset( ) const {return readOffset;}
 
 		/// \brief Sets the read bit index
 		void SetReadOffset( const BitSize_t newReadOffset ) {readOffset=newReadOffset;}
 
 		/// \brief Returns the number of bits left in the stream that haven't been read
-		inline BitSize_t GetNumberOfUnreadBits( void ) const {return numberOfBitsUsed - readOffset;}
+		inline BitSize_t GetNumberOfUnreadBits( ) const {return numberOfBitsUsed - readOffset;}
 
 		/// \brief Makes a copy of the internal data for you \a _data will point to
 		/// the stream. Partial bytes are left aligned.

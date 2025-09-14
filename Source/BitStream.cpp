@@ -18,9 +18,11 @@
 #else
 
 #include "BitStream.h"
-#include <stdio.h>
-#include <string.h>
+#include <cstring>
 #include <stdlib.h>
+#include <cstdio>
+#include <cstddef>
+#include <cstdint>
 
 #include "SocketIncludes.h"
 #include "RakNetDefines.h"
@@ -880,15 +882,19 @@ void BitStream::PrintBits( void ) const
 	PrintBits(out);
 	RAKNET_DEBUG_PRINTF("%s", out);
 }
+
 void BitStream::PrintHex( char *out ) const
 {
-	BitSize_t i;
-	for ( i=0; i < GetNumberOfBytesUsed(); i++)
+    const auto n = GetNumberOfBytesUsed();
+
+	for ( size_t i = 0; i < n; ++i)
 	{
-		sprintf(out+i*3, "%02x ", data[i]);
+		std::snprintf(out + i * 3, (n * 3 + 1) - i * 3, "%02x ",
+                  static_cast<unsigned>(data[i]));
 	}
 }
-void BitStream::PrintHex( void ) const
+
+void BitStream::PrintHex( ) const
 {
 	char out[2048];
 	PrintHex(out);
