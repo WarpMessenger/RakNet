@@ -1551,8 +1551,8 @@ Packet* RakPeer::Receive( void )
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void RakPeer::DeallocatePacket( Packet *packet )
 {
-	if ( packet == 0 )
-		return;
+	if ( packet == nullptr )
+		return nullptr;
 
 	if (packet->deleteData)
 	{
@@ -6441,3 +6441,4 @@ void RakPeer::FillIPList(void)
 #ifdef _MSC_VER
 #pragma warning( pop )
 #endif
+
