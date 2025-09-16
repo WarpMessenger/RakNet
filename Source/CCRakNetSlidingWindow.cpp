@@ -11,6 +11,9 @@
 #include <RakNet/CCRakNetSlidingWindow.h>
 #include <RakNet/MTUSize.h>
 
+#include <cstdlib> // fix abs error on linux with clang 19
+#include <cmath>
+
 #if USE_SLIDING_WINDOW_CONGESTION_CONTROL == 1
 
 static constexpr double UNSET_TIME_US=-1;
@@ -398,3 +401,4 @@ bool CCRakNetSlidingWindow::IsInSlowStart() const
 }
 // ----------------------------------------------------------------------------------------------------------------------------
 #endif
+
