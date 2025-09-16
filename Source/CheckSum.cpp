@@ -25,7 +25,7 @@
 *   Adds the bytes of the unsigned int to the CheckSum
 ****************************************************************************/
 
-void CheckSum::Add ( unsigned int value )
+void CheckSum::Add (const unsigned int w )
 {
 	union
 	{
@@ -34,12 +34,10 @@ void CheckSum::Add ( unsigned int value )
 	}
 
 	data{};
-	data.value = value;
+	data.value = w;
 
-	for (unsigned char byte : data.bytes)
-		Add ( byte )
-
-		;
+	for (const unsigned char byte : data.bytes)
+		Add ( byte );
 } // CheckSum::add(unsigned int)
 
 /****************************************************************************
@@ -52,7 +50,7 @@ void CheckSum::Add ( unsigned int value )
 *   Adds the bytes of the unsigned short value to the CheckSum
 ****************************************************************************/
 
-void CheckSum::Add ( unsigned short value )
+void CheckSum::Add (const unsigned short w )
 {
 	union
 	{
@@ -61,12 +59,10 @@ void CheckSum::Add ( unsigned short value )
 	}
 
 	data{};
-	data.value = value;
+	data.value = w;
 
-	for (unsigned char byte : data.bytes)
-		Add ( byte )
-
-		;
+	for (const unsigned char byte : data.bytes)
+		Add ( byte );
 } // CheckSum::add(unsigned short)
 
 /****************************************************************************
@@ -81,7 +77,7 @@ void CheckSum::Add ( unsigned short value )
 
 void CheckSum::Add ( unsigned char value )
 {
-	auto cipher = (unsigned char)( value ^ ( r >> 8 ) );
+  const auto cipher = static_cast<unsigned char>(value ^ (r >> 8));
 	r = ( cipher + r ) * c1 + c2;
 	sum += cipher;
 } // CheckSum::add(unsigned char)
@@ -98,10 +94,8 @@ void CheckSum::Add ( unsigned char value )
 *   Adds the bytes to the CheckSum
 ****************************************************************************/
 
-void CheckSum::Add ( unsigned char *b, unsigned int length )
+void CheckSum::Add ( unsigned char *b, const unsigned int length )
 {
-	for ( unsigned int i = 0; i < length; i++ )
-		Add ( b[ i ] )
-
-		;
+	for ( unsigned int i = 0; i < length; ++i )
+		Add ( b[ i ] );
 } // CheckSum::add(LPunsigned char, unsigned int)

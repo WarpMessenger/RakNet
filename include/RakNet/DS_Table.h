@@ -235,8 +235,10 @@ namespace DataStructures
 		/// \param[in] initialCellValues Initial values to give the row (optional)
 		/// \return The newly added row
 		Table::Row* AddRow(unsigned rowId);
-		Table::Row* AddRow(unsigned rowId, DataStructures::List<Cell> &initialCellValues);
-		Table::Row* AddRow(unsigned rowId, DataStructures::List<Cell*> &initialCellValues, bool copyCells=false);
+		Table::Row* AddRow(unsigned rowId,
+                       const DataStructures::List<Cell> &initialCellValues);
+		Table::Row* AddRow(unsigned rowId,
+                       const DataStructures::List<Cell*> &initialCellValues, bool copyCells=false);
 
 		/// \brief Removes a row specified by rowId.
 		/// \param[in] rowId The ID of the row
@@ -245,7 +247,7 @@ namespace DataStructures
 
 		/// \brief Removes all the rows with IDs that the specified table also has.
 		/// \param[in] tableContainingRowIDs The IDs of the rows
-		void RemoveRows(Table *tableContainingRowIDs);
+		void RemoveRows(const Table *tableContainingRowIDs);
 
 		/// \brief Updates a particular cell in the table.
 		/// \note If you are going to update many cells of a particular row, it is more efficient to call GetRow and perform the operations on the row directly.
@@ -254,11 +256,13 @@ namespace DataStructures
 		/// \param[in] columnIndex The column of the cell
 		/// \param[in] value The data to set
 		bool UpdateCell(unsigned rowId, unsigned columnIndex, int value);
-		bool UpdateCell(unsigned rowId, unsigned columnIndex, char *str);
-		bool UpdateCell(unsigned rowId, unsigned columnIndex, int byteLength, char *data);
+		bool UpdateCell(unsigned rowId, unsigned columnIndex, const char *str);
+		bool UpdateCell(unsigned rowId, unsigned columnIndex, int byteLength,
+                    const char *data);
 		bool UpdateCellByIndex(unsigned rowIndex, unsigned columnIndex, int value);
-		bool UpdateCellByIndex(unsigned rowIndex, unsigned columnIndex, char *str);
-		bool UpdateCellByIndex(unsigned rowIndex, unsigned columnIndex, int byteLength, char *data);
+		bool UpdateCellByIndex(unsigned rowIndex, unsigned columnIndex,
+                           const char *str);
+		bool UpdateCellByIndex(unsigned rowIndex, unsigned columnIndex, int byteLength, const char *data);
 
 		/// \brief Note this is much less efficient to call than GetRow, then working with the cells directly.
 		/// Numeric, string, binary
@@ -287,7 +291,7 @@ namespace DataStructures
 		/// \param[in] rowIds An arrow of row IDs.  Only these rows with these IDs are returned.  Pass 0 for all rows.
 		/// \param[in] numRowIDs The number of elements in \a rowIds
 		/// \param[out] result The result of the query.  If no rows are returned, the table will only have columns.
-		void QueryTable(unsigned *columnIndicesSubset, unsigned numColumnSubset, FilterQuery *inclusionFilters, unsigned numInclusionFilters, unsigned *rowIds, unsigned numRowIDs, Table *result);
+		void QueryTable(const unsigned *columnIndicesSubset, unsigned numColumnSubset, FilterQuery *inclusionFilters, unsigned numInclusionFilters, const unsigned *rowIds, unsigned numRowIDs, Table *result);
 
 		/// \brief Sorts the table by rows
 		/// \details You can sort the table in ascending or descending order on one or more columns
@@ -331,11 +335,15 @@ namespace DataStructures
 		Table& operator = ( const Table& input );
 
 	protected:
-		Table::Row* AddRowColumns(unsigned rowId, Row *row, DataStructures::List<unsigned> columnIndices);
+		Table::Row* AddRowColumns(unsigned rowId, const Row *row,
+       const DataStructures::List<unsigned>& columnIndices);
 
 		void DeleteRow(Row *row);
 
-		void QueryRow(DataStructures::List<unsigned> &inclusionFilterColumnIndices, DataStructures::List<unsigned> &columnIndicesToReturn, unsigned key, Table::Row* row, FilterQuery *inclusionFilters, Table *result);
+		void QueryRow(
+        const DataStructures::List<unsigned> &inclusionFilterColumnIndices,
+        const DataStructures::List<unsigned> &columnIndicesToReturn, unsigned key, const Table::Row* row,
+        const FilterQuery *inclusionFilters, Table *result);
 
 		// 16 is arbitrary and is the order of the BPlus tree.  Higher orders are better for searching while lower orders are better for
 		// Insertions and deletions.

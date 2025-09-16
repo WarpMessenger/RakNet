@@ -110,7 +110,7 @@ public:
 	/// \param[in] _orderingChannel See RakPeerInterface::Send()
 	/// \param[in] cb Callback to get progress updates. Pass 0 to not use.
 	/// \return A set ID, identifying this download set.  Returns 65535 on host unreachable.
-	unsigned short DownloadFromSubdirectory(const char *subdir, const char *outputSubdir, bool prependAppDirToOutputSubdir, SystemAddress host, FileListTransferCBInterface *onFileCallback, PacketPriority _priority, char _orderingChannel, FileListProgress *cb);
+	unsigned short DownloadFromSubdirectory(const char *subdir, const char *outputSubdir, bool prependAppDirToOutputSubdir, const SystemAddress& host, FileListTransferCBInterface *onFileCallback, PacketPriority _priority, char _orderingChannel, FileListProgress *cb);
 
 	/// \brief Downloads files from the matching parameter \a subdir in AddUploadsFromSubdirectory.
 	/// \details \a subdir must contain all starting characters in \a subdir in AddUploadsFromSubdirectory
@@ -129,7 +129,7 @@ public:
 	/// \param[in] _orderingChannel See RakPeerInterface::Send()
 	/// \param[in] cb Callback to get progress updates. Pass 0 to not use.
 	/// \return A set ID, identifying this download set.  Returns 65535 on host unreachable.
-	unsigned short DownloadFromSubdirectory(FileList &localFiles, const char *subdir, const char *outputSubdir, bool prependAppDirToOutputSubdir, SystemAddress host, FileListTransferCBInterface *onFileCallback, PacketPriority _priority, char _orderingChannel, FileListProgress *cb);
+	unsigned short DownloadFromSubdirectory(FileList &localFiles, const char *subdir, const char *outputSubdir, bool prependAppDirToOutputSubdir, const SystemAddress& host, FileListTransferCBInterface *onFileCallback, PacketPriority _priority, char _orderingChannel, FileListProgress *cb);
 
 	/// Hash files already on the harddrive, in preparation for a call to DownloadFromSubdirectory(). Passed to second version of DownloadFromSubdirectory()
 	/// This is slow, and it is exposed so you can call it from a thread before calling DownloadFromSubdirectory()
@@ -154,7 +154,7 @@ public:
 	/// \internal For plugin handling
 	virtual PluginReceiveResult OnReceive(Packet *packet);
 protected:
-	void OnDownloadRequest(Packet *packet);
+	void OnDownloadRequest(const Packet *packet);
 
 	char applicationDirectory[512];
 	FileListTransfer *fileListTransfer;

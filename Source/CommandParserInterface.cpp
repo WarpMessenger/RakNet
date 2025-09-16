@@ -8,11 +8,9 @@
  *
  */
 
-#include "../include/RakNet/CommandParserInterface.h"
-#include "../include/RakNet/TransportInterface.h"
-#include <string.h>
-#include "../include/RakNet/RakAssert.h"
-#include <stdio.h>
+#include <RakNet/CommandParserInterface.h>
+#include <RakNet/TransportInterface.h>
+#include <RakNet/RakAssert.h>
 
 
 #if   defined(WINDOWS_STORE_RT)
@@ -27,7 +25,7 @@
 #include <arpa/inet.h>
 #endif
 
-#include "../include/RakNet/LinuxStrings.h"
+#include <RakNet/LinuxStrings.h>
 
 using namespace RakNet;
 
@@ -45,16 +43,16 @@ int RakNet::RegisteredCommandComp( const char* const & key, const RegisteredComm
 CommandParserInterface::CommandParserInterface() {}
 CommandParserInterface::~CommandParserInterface() {}
 
-void CommandParserInterface::ParseConsoleString(char *str, const char delineator, unsigned char delineatorToggle, unsigned *numParameters, char **parameterList, unsigned parameterListLength)
+void CommandParserInterface::ParseConsoleString(char *str, const char delineator, const unsigned char delineatorToggle, unsigned *numParameters, char **parameterList,
+    const unsigned parameterListLength)
 {
 	unsigned strIndex, parameterListIndex;
-	unsigned strLen;
-	bool replaceDelineator=true;
+  bool replaceDelineator = true;
 
-	strLen = (unsigned) strlen(str);
+  const auto strLen = static_cast<unsigned>(strlen(str));
 
 	// Replace every instance of delineator, \n, \r with 0
-	for (strIndex=0; strIndex < strLen; strIndex++)
+	for (strIndex=0; strIndex < strLen; ++strIndex)
 	{
 		if (str[strIndex]==delineator && replaceDelineator)
 			str[strIndex]=0;
@@ -80,36 +78,33 @@ void CommandParserInterface::ParseConsoleString(char *str, const char delineator
 			if (parameterListIndex >= parameterListLength)
 				break;
 
-			strIndex++;
+			++strIndex;
 			while (str[strIndex]!=0 && strIndex < strLen)
-				strIndex++;
+				++strIndex;
 		}
 		else
-			strIndex++;
+			++strIndex;
 	}
 
-	parameterList[parameterListIndex]=0;
+	parameterList[parameterListIndex]=nullptr;
 	*numParameters=parameterListIndex;
 }
 void CommandParserInterface::SendCommandList(TransportInterface *transport, const SystemAddress &systemAddress)
 {
-	unsigned i;
-	if (commandList.Size())
+  if (commandList.Size())
 	{
-		for (i=0; i < commandList.Size(); i++)
+		for (unsigned i = 0; i < commandList.Size(); ++i)
 		{
 			transport->Send(systemAddress, "%s", commandList[i].command);
 			if (i < commandList.Size()-1)
 				transport->Send(systemAddress, ", ");
 		}
 		transport->Send(systemAddress, "\r\n");
-	}
-	else
-		transport->Send(systemAddress, "No registered commands\r\n");
+	} else transport->Send(systemAddress, "No registered commands\r\n");
 }
-void CommandParserInterface::RegisterCommand(unsigned char parameterCount, const char *command, const char *commandHelp)
+void CommandParserInterface::RegisterCommand(const unsigned char parameterCount, const char *command, const char *commandHelp)
 {
-	RegisteredCommand rc;
+	RegisteredCommand rc{};
 	rc.command=command;
 	rc.commandHelp=commandHelp;
 	rc.parameterCount=parameterCount;
@@ -118,8 +113,7 @@ void CommandParserInterface::RegisterCommand(unsigned char parameterCount, const
 bool CommandParserInterface::GetRegisteredCommand(const char *command, RegisteredCommand *rc)
 {
 	bool objectExists;
-	unsigned index;
-	index=commandList.GetIndexFromKey(command, &objectExists);
+  const unsigned index = commandList.GetIndexFromKey(command, &objectExists);
 	if (objectExists)
 		*rc=commandList[index];
 	return objectExists;

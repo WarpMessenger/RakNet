@@ -8,9 +8,9 @@
 
 // If compiling with MFC, you might want to add #include "StdAfx.h"
 
-#define _CRT_SECURE_NO_WARNINGS
-#include "../include/RakNet/DR_SHA1.h"
-#include <stdlib.h>
+// #define _CRT_SECURE_NO_WARNINGS
+#include <RakNet/DR_SHA1.h>
+#include <cstdlib>
 
 #define SHA1_MAX_FILE_BUFFER (32 * 20 * 820)
 
@@ -46,7 +46,7 @@
 
 CSHA1::CSHA1()
 {
-	m_block = (SHA1_WORKSPACE_BLOCK*)m_workspace;
+	m_block = reinterpret_cast<SHA1_WORKSPACE_BLOCK*>(m_workspace);
 
 	Reset();
 }
@@ -142,13 +142,13 @@ void CSHA1::Update(const UINT_8* pbData, UINT_32 uLen)
 #ifdef SHA1_UTILITY_FUNCTIONS
 bool CSHA1::HashFile(const TCHAR* tszFileName)
 {
-	if(tszFileName == NULL) return false;
+	if(tszFileName == nullptr) return false;
 
 	FILE* fpIn = _tfopen(tszFileName, _T("rb"));
-	if(fpIn == NULL) return false;
+	if(fpIn == nullptr) return false;
 
-	UINT_8* pbData = new UINT_8[SHA1_MAX_FILE_BUFFER];
-	if(pbData == NULL) { fclose(fpIn); return false; }
+	auto* pbData = new UINT_8[SHA1_MAX_FILE_BUFFER];
+	if(pbData == nullptr) { fclose(fpIn); return false; }
 
 	bool bSuccess = true;
 	while(true)
@@ -202,9 +202,9 @@ void CSHA1::Final()
 }
 
 #ifdef SHA1_UTILITY_FUNCTIONS
-bool CSHA1::ReportHash(TCHAR* tszReport, REPORT_TYPE rtReportType) const
+bool CSHA1::ReportHash(TCHAR* tszReport, const REPORT_TYPE rtReportType) const
 {
-	if(tszReport == NULL) return false;
+	if(tszReport == nullptr) return false;
 
 	TCHAR tszTemp[16];
 
@@ -238,7 +238,8 @@ bool CSHA1::ReportHash(TCHAR* tszReport, REPORT_TYPE rtReportType) const
 #endif
 
 #ifdef SHA1_STL_FUNCTIONS
-bool CSHA1::ReportHashStl(std::basic_string<TCHAR>& strOut, REPORT_TYPE rtReportType) const
+bool CSHA1::ReportHashStl(std::basic_string<TCHAR>& strOut,
+                          const REPORT_TYPE rtReportType) const
 {
 	TCHAR tszOut[84];
 	const bool bResult = ReportHash(tszOut, rtReportType);
@@ -249,24 +250,25 @@ bool CSHA1::ReportHashStl(std::basic_string<TCHAR>& strOut, REPORT_TYPE rtReport
 
 bool CSHA1::GetHash(UINT_8* pbDest20) const
 {
-	if(pbDest20 == NULL) return false;
+	if(pbDest20 == nullptr) return false;
 	memcpy(pbDest20, m_digest, 20);
 	return true;
 }
 
 // Get the raw message digest
 // Added by Kevin to be quicker
-unsigned char * CSHA1::GetHash( void ) const
+unsigned char * CSHA1::GetHash() const
 {
-	return ( unsigned char * ) m_digest;
+	return const_cast<unsigned char*>(m_digest);
 }
 
 // http://cseweb.ucsd.edu/~mihir/papers/hmac-cb.pdf
 // Sample code: http://www.opensource.apple.com/source/freeradius/freeradius-11/freeradius/src/lib/hmac.c
-void CSHA1::HMAC(unsigned char *sharedKey, int sharedKeyLength, unsigned char *data, int dataLength, unsigned char output[SHA1_LENGTH])
+void CSHA1::HMAC(const unsigned char *sharedKey, int sharedKeyLength,
+                 const unsigned char *data, const int dataLength, unsigned char output[SHA1_LENGTH])
 {
 	// 1. Append zeros to the end of K to create a 64 byte string
-	static const int sha1BlockLength=64;
+	static constexpr int sha1BlockLength=64;
 
 	if (sharedKeyLength > sha1BlockLength)
 		sharedKeyLength = sha1BlockLength;
@@ -281,7 +283,7 @@ void CSHA1::HMAC(unsigned char *sharedKey, int sharedKeyLength, unsigned char *d
 	memcpy( keyWithIpad, sharedKey, sharedKeyLength);
 	memcpy( keyWithOpad, sharedKey, sharedKeyLength);
 
-	for (int i = 0; i < sha1BlockLength; i++) {
+	for (int i = 0; i < sha1BlockLength; ++i) {
 		keyWithIpad[i] ^= 0x36;
 		keyWithOpad[i] ^= 0x5c;
 	}

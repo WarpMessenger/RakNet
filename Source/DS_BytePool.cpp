@@ -8,8 +8,8 @@
  *
  */
 
-#include "../include/RakNet/DS_BytePool.h"
-#include "../include/RakNet/RakAssert.h"
+#include <RakNet/DS_BytePool.h>
+#include <RakNet/RakAssert.h>
 #ifndef __APPLE__
 // Use stdlib and not malloc for compatibility
 #include <stdlib.h>
@@ -27,14 +27,15 @@ BytePool::BytePool()
 BytePool::~BytePool()
 {
 }
-void BytePool::SetPageSize(int size)
+void BytePool::SetPageSize(const int size)
 {
 	pool128.SetPageSize(size);
 	pool512.SetPageSize(size);
 	pool2048.SetPageSize(size);
 	pool8192.SetPageSize(size);
 }
-unsigned char *BytePool::Allocate(int bytesWanted, const char *file, unsigned int line)
+unsigned char *BytePool::Allocate(int bytesWanted, const char *file,
+                                  const unsigned int line)
 {
 #ifdef _DISABLE_BYTE_POOL
 	return rakMalloc_Ex(bytesWanted, _FILE_AND_LINE_);
@@ -45,67 +46,68 @@ unsigned char *BytePool::Allocate(int bytesWanted, const char *file, unsigned in
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex128.Lock();
 		#endif
-		out = (unsigned char*) pool128.Allocate(file, line);
+		out = reinterpret_cast<unsigned char*>(pool128.Allocate(file, line));
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex128.Unlock();
 		#endif
 		out[0]=0;
-		return ((unsigned char*) out)+1;
+		return out+1;
 	}
 	if (bytesWanted <= 511)
 	{
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex512.Lock();
 		#endif
-		out = (unsigned char*) pool512.Allocate(file, line);
+		out = reinterpret_cast<unsigned char*>(pool512.Allocate(file, line));
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex512.Unlock();
 		#endif
 		out[0]=1;
-		return ((unsigned char*) out)+1;
+		return out+1;
 	}
 	if (bytesWanted <= 2047)
 	{
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex2048.Lock();
 		#endif
-		out = (unsigned char*) pool2048.Allocate(file, line);
+		out = reinterpret_cast<unsigned char*>(pool2048.Allocate(file, line));
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex2048.Unlock();
 		#endif
 		out[0]=2;
-		return ((unsigned char*) out)+1;
+		return  out+1;
 	}
 	if (bytesWanted <= 8191)
 	{
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex8192.Lock();
 		#endif
-		out = (unsigned char*) pool8192.Allocate(file, line);
+		out = reinterpret_cast<unsigned char*>(pool8192.Allocate(file, line));
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex8192.Unlock();
 		#endif
 		out[0]=3;
-		return ((unsigned char*) out)+1;
+		return out+1;
 	}
 
-	out = (unsigned char*) rakMalloc_Ex(bytesWanted+1, _FILE_AND_LINE_);
-	out[0]=(unsigned char)255;
+	out = static_cast<unsigned char*>(
+      rakMalloc_Ex(bytesWanted + 1, _FILE_AND_LINE_));
+	out[0]= static_cast<unsigned char>(255);
 	return out+1;
 }
-void BytePool::Release(unsigned char *data, const char *file, unsigned int line)
+void BytePool::Release(unsigned char *data, const char *file,
+                       const unsigned int line)
 {
 #ifdef _DISABLE_BYTE_POOL
 	_rakFree_Ex(data, _FILE_AND_LINE_ );
 #endif
-	unsigned char *realData = data-1;
-	switch (realData[0])
+  switch (unsigned char* realData = data - 1; realData[0])
 	{
 	case 0:
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex128.Lock();
 		#endif
-		pool128.Release((unsigned char(*)[128]) realData, file, line );
+		pool128.Release(reinterpret_cast<unsigned char(*)[128]>(realData), file, line );
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex128.Unlock();
 		#endif
@@ -114,7 +116,7 @@ void BytePool::Release(unsigned char *data, const char *file, unsigned int line)
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex512.Lock();
 		#endif
-		pool512.Release((unsigned char(*)[512]) realData, file, line );
+		pool512.Release(reinterpret_cast<unsigned char(*)[512]>(realData), file, line );
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex512.Unlock();
 		#endif
@@ -123,7 +125,7 @@ void BytePool::Release(unsigned char *data, const char *file, unsigned int line)
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex2048.Lock();
 		#endif
-		pool2048.Release((unsigned char(*)[2048]) realData, file, line );
+		pool2048.Release(reinterpret_cast<unsigned char(*)[2048]>(realData), file, line );
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex2048.Unlock();
 		#endif
@@ -132,7 +134,7 @@ void BytePool::Release(unsigned char *data, const char *file, unsigned int line)
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex8192.Lock();
 		#endif
-		pool8192.Release((unsigned char(*)[8192]) realData, file, line );
+		pool8192.Release(reinterpret_cast<unsigned char(*)[8192]>(realData), file, line );
 		#ifdef _THREADSAFE_BYTE_POOL
 		mutex8192.Unlock();
 		#endif

@@ -280,7 +280,8 @@ public:
 
 unsigned char * GetHash( void ) const;
 // KevinJ: http://cseweb.ucsd.edu/~mihir/papers/hmac-cb.pdf
-	static void HMAC(unsigned char *sharedKey, int sharedKeyLength, unsigned char *data, int dataLength, unsigned char output[SHA1_LENGTH]);
+	static void HMAC(const unsigned char *sharedKey, int sharedKeyLength,
+                 const unsigned char *data, int dataLength, unsigned char output[SHA1_LENGTH]);
 
 private:
 	// Private SHA-1 transformation

@@ -8,19 +8,19 @@
  *
  */
 
-#include "../include/RakNet/NativeFeatureIncludes.h"
+#include <RakNet/NativeFeatureIncludes.h>
 #if _RAKNET_SUPPORT_DirectoryDeltaTransfer==1 && _RAKNET_SUPPORT_FileOperations==1
 
-#include "../include/RakNet/DirectoryDeltaTransfer.h"
-#include "../include/RakNet/FileList.h"
-#include "../include/RakNet/StringCompressor.h"
-#include "../include/RakNet/RakPeerInterface.h"
-#include "../include/RakNet/FileListTransfer.h"
-#include "../include/RakNet/FileListTransferCBInterface.h"
-#include "../include/RakNet/BitStream.h"
-#include "../include/RakNet/MessageIdentifiers.h"
-#include "../include/RakNet/FileOperations.h"
-#include "../include/RakNet/IncrementalReadInterface.h"
+#include <RakNet/DirectoryDeltaTransfer.h>
+#include <RakNet/FileList.h>
+#include <RakNet/StringCompressor.h>
+#include <RakNet/RakPeerInterface.h>
+#include <RakNet/FileListTransfer.h>
+#include <RakNet/FileListTransferCBInterface.h>
+#include <RakNet/BitStream.h>
+#include <RakNet/MessageIdentifiers.h>
+#include <RakNet/FileOperations.h>
+#include <RakNet/IncrementalReadInterface.h>
 
 using namespace RakNet;
 
@@ -28,15 +28,15 @@ using namespace RakNet;
 #pragma warning( push )
 #endif
 
-class DDTCallback : public FileListTransferCBInterface
+class DDTCallback final : public FileListTransferCBInterface
 {
 public:
 	unsigned subdirLen;
 	char outputSubdir[512];
 	FileListTransferCBInterface *onFileCallback;
 
-	DDTCallback() {}
-	virtual ~DDTCallback() {}
+	DDTCallback() : subdirLen(0), outputSubdir{}, onFileCallback(nullptr) {}
+  ~DDTCallback() override = default;
 
 	bool OnFile(OnFileStruct *onFileStruct) override {
 		char fullPathToDir[1024];
@@ -45,7 +45,7 @@ public:
 		{
 			strcpy(fullPathToDir, outputSubdir);
 			strcat(fullPathToDir, onFileStruct->fileName+subdirLen);
-			WriteFileWithDirectories(fullPathToDir, (char*)onFileStruct->fileData, (unsigned int ) onFileStruct->byteLengthOfThisFile);
+			WriteFileWithDirectories(fullPathToDir, onFileStruct->fileData, onFileStruct->byteLengthOfThisFile);
 		}
 		else
 			fullPathToDir[0]=0;
@@ -94,8 +94,7 @@ void DirectoryDeltaTransfer::SetFileListTransferPlugin(FileListTransfer *flt)
 	{
 		DataStructures::List<FileListProgress*> fileListProgressList;
 		fileListTransfer->GetCallbacks(fileListProgressList);
-		unsigned int i;
-		for (i=0; i < fileListProgressList.Size(); i++)
+    for (unsigned int i = 0; i < fileListProgressList.Size(); ++i)
 			availableUploads->RemoveCallback(fileListProgressList[i]);
 	}
 
@@ -105,8 +104,7 @@ void DirectoryDeltaTransfer::SetFileListTransferPlugin(FileListTransfer *flt)
 	{
 		DataStructures::List<FileListProgress*> fileListProgressList;
 		flt->GetCallbacks(fileListProgressList);
-		unsigned int i;
-		for (i=0; i < fileListProgressList.Size(); i++)
+    for (unsigned int i = 0; i < fileListProgressList.Size(); ++i)
 			availableUploads->AddCallback(fileListProgressList[i]);
 	}
 	else
@@ -116,7 +114,7 @@ void DirectoryDeltaTransfer::SetFileListTransferPlugin(FileListTransfer *flt)
 }
 void DirectoryDeltaTransfer::SetApplicationDirectory(const char *pathToApplication)
 {
-	if (pathToApplication==0 || pathToApplication[0]==0)
+	if (pathToApplication==nullptr || pathToApplication[0]==0)
 		applicationDirectory[0]=0;
 	else
 	{
@@ -126,7 +124,7 @@ void DirectoryDeltaTransfer::SetApplicationDirectory(const char *pathToApplicati
 		applicationDirectory[511]=0;
 	}
 }
-void DirectoryDeltaTransfer::SetUploadSendParameters(PacketPriority _priority, char _orderingChannel)
+void DirectoryDeltaTransfer::SetUploadSendParameters(PacketPriority _priority, const char _orderingChannel)
 {
 	priority=_priority;
 	orderingChannel=_orderingChannel;
@@ -134,7 +132,9 @@ void DirectoryDeltaTransfer::SetUploadSendParameters(PacketPriority _priority, c
 void DirectoryDeltaTransfer::AddUploadsFromSubdirectory(const char *subdir) const {
 	availableUploads->AddFilesFromDirectory(applicationDirectory, subdir, true, false, true, FileListNodeContext(0,0,0,0));
 }
-unsigned short DirectoryDeltaTransfer::DownloadFromSubdirectory(FileList &localFiles, const char *subdir, const char *outputSubdir, bool prependAppDirToOutputSubdir, SystemAddress host, FileListTransferCBInterface *onFileCallback, PacketPriority _priority, char _orderingChannel, FileListProgress *cb)
+unsigned short DirectoryDeltaTransfer::DownloadFromSubdirectory(FileList &localFiles, const char *subdir, const char *outputSubdir,
+    const bool prependAppDirToOutputSubdir, const SystemAddress& host, FileListTransferCBInterface *onFileCallback, const PacketPriority _priority,
+    const char _orderingChannel, FileListProgress *cb)
 {
 	RakAssert(host!=UNASSIGNED_SYSTEM_ADDRESS);
 
@@ -146,7 +146,7 @@ unsigned short DirectoryDeltaTransfer::DownloadFromSubdirectory(FileList &localF
 	{
 		transferCallback->subdirLen=static_cast<unsigned int>(strlen(subdir));
 		if (subdir[transferCallback->subdirLen-1]!='/' && subdir[transferCallback->subdirLen-1]!='\\')
-			transferCallback->subdirLen++;
+			++transferCallback->subdirLen;
 	}
 	else
 		transferCallback->subdirLen=0;
@@ -174,22 +174,25 @@ unsigned short DirectoryDeltaTransfer::DownloadFromSubdirectory(FileList &localF
 
 	return setId;
 }
-unsigned short DirectoryDeltaTransfer::DownloadFromSubdirectory(const char *subdir, const char *outputSubdir, bool prependAppDirToOutputSubdir, SystemAddress host, FileListTransferCBInterface *onFileCallback, PacketPriority _priority, char _orderingChannel, FileListProgress *cb)
+unsigned short DirectoryDeltaTransfer::DownloadFromSubdirectory(const char *subdir, const char *outputSubdir,
+    const bool prependAppDirToOutputSubdir, const SystemAddress& host, FileListTransferCBInterface *onFileCallback, const PacketPriority _priority,
+    const char _orderingChannel, FileListProgress *cb)
 {
 	FileList localFiles;
 	// Get a hash of all the files that we already have (if any)
-	localFiles.AddFilesFromDirectory(prependAppDirToOutputSubdir ? applicationDirectory : 0, outputSubdir, true, false, true, FileListNodeContext(0,0,0,0));
+	localFiles.AddFilesFromDirectory(prependAppDirToOutputSubdir ? applicationDirectory : nullptr, outputSubdir, true, false, true, FileListNodeContext(0,0,0,0));
 	return DownloadFromSubdirectory(localFiles, subdir, outputSubdir, prependAppDirToOutputSubdir, host, onFileCallback, _priority, _orderingChannel, cb);
 }
-void DirectoryDeltaTransfer::GenerateHashes(FileList &localFiles, const char *outputSubdir, bool prependAppDirToOutputSubdir)
+void DirectoryDeltaTransfer::GenerateHashes(FileList &localFiles, const char *outputSubdir,
+    const bool prependAppDirToOutputSubdir)
 {
-	localFiles.AddFilesFromDirectory(prependAppDirToOutputSubdir ? applicationDirectory : 0, outputSubdir, true, false, true, FileListNodeContext(0,0,0,0));
+	localFiles.AddFilesFromDirectory(prependAppDirToOutputSubdir ? applicationDirectory : nullptr, outputSubdir, true, false, true, FileListNodeContext(0,0,0,0));
 }
-void DirectoryDeltaTransfer::ClearUploads(void)
+void DirectoryDeltaTransfer::ClearUploads()
 {
 	availableUploads->Clear();
 }
-void DirectoryDeltaTransfer::OnDownloadRequest(Packet *packet)
+void DirectoryDeltaTransfer::OnDownloadRequest(const Packet *packet)
 {
 	char subdir[256];
 	char remoteSubdir[256];

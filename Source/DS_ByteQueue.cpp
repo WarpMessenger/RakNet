@@ -8,10 +8,9 @@
  *
  */
 
-#include "../include/RakNet/DS_ByteQueue.h"
-#include <string.h> // Memmove
-#include <stdlib.h> // realloc
-#include <stdio.h>
+#include <RakNet/DS_ByteQueue.h>
+#include <cstring> // Memmove
+#include <cstdio>
 
 
 using namespace DataStructures;
@@ -19,7 +18,7 @@ using namespace DataStructures;
 ByteQueue::ByteQueue()
 {
 	readOffset=writeOffset=lengthAllocated=0;
-	data=0;
+	data=nullptr;
 }
 ByteQueue::~ByteQueue()
 {
@@ -27,19 +26,18 @@ ByteQueue::~ByteQueue()
 	
 
 }
-void ByteQueue::WriteBytes(const char *in, unsigned length, const char *file, unsigned int line)
+void ByteQueue::WriteBytes(const char *in, const unsigned length, const char *file, const unsigned int line)
 {
-	unsigned bytesWritten;
-	bytesWritten=GetBytesWritten();
-	if (lengthAllocated==0 || length > lengthAllocated-bytesWritten-1)
+  if (const unsigned bytesWritten = GetBytesWritten();
+      lengthAllocated ==0 || length > lengthAllocated-bytesWritten-1)
 	{
-		unsigned oldLengthAllocated=lengthAllocated;
+    const unsigned oldLengthAllocated=lengthAllocated;
 		// Always need to waste 1 byte for the math to work, else writeoffset==readoffset
 		unsigned newAmountToAllocate=length+oldLengthAllocated+1;
 		if (newAmountToAllocate<256)
 			newAmountToAllocate=256;
 		lengthAllocated=lengthAllocated + newAmountToAllocate;
-		data=(char*)rakRealloc_Ex(data, lengthAllocated, file, line);
+		data= static_cast<char*>(rakRealloc_Ex(data, lengthAllocated, file, line));
 		if (writeOffset < readOffset)
 		{
 			if (writeOffset <= newAmountToAllocate)
@@ -66,10 +64,11 @@ void ByteQueue::WriteBytes(const char *in, unsigned length, const char *file, un
 	}
 	writeOffset=(writeOffset+length) % lengthAllocated;
 }
-bool ByteQueue::ReadBytes(char *out, unsigned maxLengthToRead, bool peek)
+bool ByteQueue::ReadBytes(char *out, const unsigned maxLengthToRead,
+                          const bool peek)
 {
-	unsigned bytesWritten = GetBytesWritten();
-	unsigned bytesToRead = bytesWritten < maxLengthToRead ? bytesWritten : maxLengthToRead;
+  const unsigned bytesWritten = GetBytesWritten();
+  const unsigned bytesToRead = bytesWritten < maxLengthToRead ? bytesWritten : maxLengthToRead;
 	if (bytesToRead==0)
 		return false;
 	if (writeOffset>=readOffset)
@@ -78,13 +77,11 @@ bool ByteQueue::ReadBytes(char *out, unsigned maxLengthToRead, bool peek)
 	}
 	else
 	{
-		unsigned availableUntilWrap = lengthAllocated-readOffset;
-		if (bytesToRead <= availableUntilWrap)
+    if (const unsigned availableUntilWrap = lengthAllocated - readOffset;
+        bytesToRead <= availableUntilWrap)
 		{
 			memcpy(out, data+readOffset, bytesToRead);
-		}
-		else
-		{
+		} else {
 			memcpy(out, data+readOffset, availableUntilWrap);
 			memcpy(out+availableUntilWrap, data, bytesToRead-availableUntilWrap);
 		}
@@ -103,35 +100,34 @@ char* ByteQueue::PeekContiguousBytes(unsigned int *outLength) const
 		*outLength=lengthAllocated-readOffset;
 	return data+readOffset;
 }
-void ByteQueue::Clear(const char *file, unsigned int line)
+void ByteQueue::Clear(const char *file, const unsigned int line)
 {
 	if (lengthAllocated)
 		rakFree_Ex(data, file, line );
 	readOffset=writeOffset=lengthAllocated=0;
-	data=0;
+	data=nullptr;
 }
-unsigned ByteQueue::GetBytesWritten(void) const
+unsigned ByteQueue::GetBytesWritten() const
 {
 	if (writeOffset>=readOffset)
 		return writeOffset-readOffset;
 	else
 		return writeOffset+(lengthAllocated-readOffset);
 }
-void ByteQueue::IncrementReadOffset(unsigned length)
+void ByteQueue::IncrementReadOffset(const unsigned length)
 {
 	readOffset=(readOffset+length) % lengthAllocated;
 }
-void ByteQueue::DecrementReadOffset(unsigned length)
+void ByteQueue::DecrementReadOffset(const unsigned length)
 {
 	if (length>readOffset)
 		readOffset=lengthAllocated-(length-readOffset);
 	else
 		readOffset-=length;
 }
-void ByteQueue::Print(void)
+void ByteQueue::Print()
 {
-	unsigned i;
-	for (i=readOffset; i!=writeOffset; i++)
+  for (unsigned i = readOffset; i!=writeOffset; ++i)
 		RAKNET_DEBUG_PRINTF("%i ", data[i]);
 	RAKNET_DEBUG_PRINTF("\n");
 }

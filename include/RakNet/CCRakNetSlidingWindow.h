@@ -113,28 +113,33 @@ class CCRakNetSlidingWindow
 	void OnSendBytes(CCTimeType curTime, uint32_t numBytes);
 
 	/// Call this when you get a packet pair
-	void OnGotPacketPair(DatagramSequenceNumberType datagramSequenceNumber, uint32_t sizeInBytes, CCTimeType curTime);
+	void OnGotPacketPair(const DatagramSequenceNumberType& datagramSequenceNumber, uint32_t sizeInBytes, CCTimeType curTime);
 
 	/// Call this when you get a packet (including packet pairs)
 	/// If the DatagramSequenceNumberType is out of order, skippedMessageCount will be non-zero
 	/// In that case, send a NAK for every sequence number up to that count
-	bool OnGotPacket(DatagramSequenceNumberType datagramSequenceNumber, bool isContinuousSend, CCTimeType curTime, uint32_t sizeInBytes, uint32_t *skippedMessageCount);
+	bool OnGotPacket(const DatagramSequenceNumberType& datagramSequenceNumber, bool isContinuousSend, CCTimeType curTime, uint32_t sizeInBytes, uint32_t *skippedMessageCount);
 
 	/// Call when you get a NAK, with the sequence number of the lost message
 	/// Affects the congestion control
 	void OnResend(CCTimeType curTime, RakNet::TimeUS nextActionTime);
-	void OnNAK(CCTimeType curTime, DatagramSequenceNumberType nakSequenceNumber);
+	void OnNAK(CCTimeType curTime,
+             const DatagramSequenceNumberType& nakSequenceNumber);
 
 	/// Call this when an ACK arrives.
 	/// hasBAndAS are possibly written with the ack, see OnSendAck()
 	/// B and AS are used in the calculations in UpdateWindowSizeAndAckOnAckPerSyn
 	/// B and AS are updated at most once per SYN 
-	void OnAck(CCTimeType curTime, CCTimeType rtt, bool hasBAndAS, BytesPerMicrosecond _B, BytesPerMicrosecond _AS, double totalUserDataBytesAcked, bool isContinuousSend, DatagramSequenceNumberType sequenceNumber );
-	void OnDuplicateAck( CCTimeType curTime, DatagramSequenceNumberType sequenceNumber );
+	void OnAck(CCTimeType curTime, CCTimeType rtt, bool hasBAndAS, BytesPerMicrosecond B, BytesPerMicrosecond AS, double totalUserDataBytesAcked, bool isContinuousSend,
+             const DatagramSequenceNumberType& sequenceNumber );
+	void OnDuplicateAck( CCTimeType curTime,
+                      const DatagramSequenceNumberType& sequenceNumber );
 	
 	/// Call when you send an ack, to see if the ack should have the B and AS parameters transmitted
 	/// Call before calling OnSendAck()
-	void OnSendAckGetBAndAS(CCTimeType curTime, bool *hasBAndAS, BytesPerMicrosecond *_B, BytesPerMicrosecond *_AS);
+	void OnSendAckGetBAndAS(CCTimeType curTime, bool *hasBAndAS,
+                          const BytesPerMicrosecond *B,
+                          const BytesPerMicrosecond *AS);
 
 	/// Call when we send an ack, to write B and AS if needed
 	/// B and AS are only written once per SYN, to prevent slow calculations
@@ -177,9 +182,11 @@ class CCRakNetSlidingWindow
 
 
 	/// Is a > b, accounting for variable overflow?
-	static bool GreaterThan(DatagramSequenceNumberType a, DatagramSequenceNumberType b);
+	static bool GreaterThan(const DatagramSequenceNumberType& a,
+                          const DatagramSequenceNumberType& b);
 	/// Is a < b, accounting for variable overflow?
-	static bool LessThan(DatagramSequenceNumberType a, DatagramSequenceNumberType b);
+	static bool LessThan(const DatagramSequenceNumberType& a,
+                       const DatagramSequenceNumberType& b);
 //	void SetTimeBetweenSendsLimit(unsigned int bitsPerSecond);
 	uint64_t GetBytesPerSecondLimitByCongestionControl(void) const;
 	  

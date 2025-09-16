@@ -56,7 +56,8 @@ public:
 
 	/// \brief Remove an implementation of CommandParserInterface previously added with AddCommandParser().
 	/// \param[in] commandParserInterface The command parser referred to
-	void RemoveCommandParser(CommandParserInterface *commandParserInterface);
+	void RemoveCommandParser(
+      const CommandParserInterface *commandParserInterface);
 
 	/// \brief Call update to read packet sent from your TransportInterface.
 	/// You should do this fairly frequently.
@@ -69,8 +70,8 @@ public:
 	void SetPrompt(const char *_prompt);
 
 protected:
-	void ListParsers(SystemAddress systemAddress);
-	void ShowPrompt(SystemAddress systemAddress);
+	void ListParsers(const SystemAddress& systemAddress);
+	void ShowPrompt(const SystemAddress& systemAddress);
 	TransportInterface *transport;
 	DataStructures::List<CommandParserInterface *> commandParserList;
 	char* password[256];

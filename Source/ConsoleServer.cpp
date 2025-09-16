@@ -8,19 +8,17 @@
  *
  */
 
-#include "../include/RakNet/NativeFeatureIncludes.h"
+#include <RakNet/NativeFeatureIncludes.h>
 #if _RAKNET_SUPPORT_ConsoleServer==1
 
-#include "../include/RakNet/ConsoleServer.h"
-#include "../include/RakNet/TransportInterface.h"
-#include "../include/RakNet/CommandParserInterface.h"
-#include <string.h>
-#include <stdlib.h>
+#include <RakNet/ConsoleServer.h>
+#include <RakNet/TransportInterface.h>
+#include <RakNet/CommandParserInterface.h>
 
 #define COMMAND_DELINATOR ' '
 #define COMMAND_DELINATOR_TOGGLE '"'
 
-#include "../include/RakNet/LinuxStrings.h"
+#include <RakNet/LinuxStrings.h>
 
 using namespace RakNet;
 
@@ -28,16 +26,17 @@ STATIC_FACTORY_DEFINITIONS(ConsoleServer,ConsoleServer);
 
 ConsoleServer::ConsoleServer()
 {
-	transport=0;
-	password[0]=0;
-	prompt=0;
+	transport=nullptr;
+	password[0]=nullptr;
+	prompt=nullptr;
 }
 ConsoleServer::~ConsoleServer()
 {
 	if (prompt)
 		rakFree_Ex(prompt, _FILE_AND_LINE_);
 }
-void ConsoleServer::SetTransportProvider(TransportInterface *transportInterface, unsigned short port)
+void ConsoleServer::SetTransportProvider(TransportInterface *transportInterface,
+                                         const unsigned short port)
 {
 	// Replace the current TransportInterface, stopping the old one, if present, and starting the new one.
 	if (transportInterface)
@@ -50,8 +49,7 @@ void ConsoleServer::SetTransportProvider(TransportInterface *transportInterface,
 		transport=transportInterface;
 		transport->Start(port, true);
 
-		unsigned i;
-		for (i=0; i < commandParserList.Size(); i++)
+    for (unsigned i = 0; i < commandParserList.Size(); ++i)
 			commandParserList[i]->OnTransportChange(transport);
 
 		//  The transport itself might have a command parser - for example password for the RakNet transport
@@ -60,17 +58,16 @@ void ConsoleServer::SetTransportProvider(TransportInterface *transportInterface,
 }
 void ConsoleServer::AddCommandParser(CommandParserInterface *commandParserInterface)
 {
-	if (commandParserInterface==0)
+	if (commandParserInterface==nullptr)
 		return;
 
 	// Non-duplicate insertion
-	unsigned i;
-	for (i=0; i < commandParserList.Size(); i++)
+  for (unsigned i = 0; i < commandParserList.Size(); ++i)
 	{
 		if (commandParserList[i]==commandParserInterface)
 			return;
 
-        if (_stricmp(commandParserList[i]->GetName(), commandParserInterface->GetName())==0)
+    if (_stricmp(commandParserList[i]->GetName(), commandParserInterface->GetName())==0)
 		{
 			// Naming conflict between two command parsers
 			RakAssert(0);
@@ -82,14 +79,15 @@ void ConsoleServer::AddCommandParser(CommandParserInterface *commandParserInterf
 	if (transport)
 		commandParserInterface->OnTransportChange(transport);
 }
-void ConsoleServer::RemoveCommandParser(CommandParserInterface *commandParserInterface)
+void ConsoleServer::RemoveCommandParser(
+    const CommandParserInterface *commandParserInterface)
 {
-	if (commandParserInterface==0)
+	if (commandParserInterface==nullptr)
 		return;
 
-	// Overwrite the element we are removing from the back of the list and delete the back of the list
-	unsigned i;
-	for (i=0; i < commandParserList.Size(); i++)
+	// Overwrite the element we are removing from the back of the list and delete
+  // the back of the list
+  for (unsigned i = 0; i < commandParserList.Size(); ++i)
 	{
 		if (commandParserList[i]==commandParserInterface)
 		{
@@ -99,21 +97,20 @@ void ConsoleServer::RemoveCommandParser(CommandParserInterface *commandParserInt
 		}
 	}
 }
-void ConsoleServer::Update(void)
+void ConsoleServer::Update()
 {
 	unsigned i;
 	char *parameterList[20]; // Up to 20 parameters
 	unsigned numParameters;
-	RakNet::SystemAddress newOrLostConnectionId;
-	RakNet::Packet *p;
-	RakNet::RegisteredCommand rc;
+  RakNet::RegisteredCommand rc{};
 
-	p = transport->Receive();
-	newOrLostConnectionId=transport->HasNewIncomingConnection();
+	RakNet::Packet* p = transport->Receive();
+	RakNet::SystemAddress newOrLostConnectionId =
+      transport->HasNewIncomingConnection();
 
 	if (newOrLostConnectionId!=UNASSIGNED_SYSTEM_ADDRESS)
 	{
-		for (i=0; i < commandParserList.Size(); i++)
+		for (i=0; i < commandParserList.Size(); ++i)
 		{
 			commandParserList[i]->OnNewIncomingConnection(newOrLostConnectionId, transport);
 		}
@@ -126,7 +123,7 @@ void ConsoleServer::Update(void)
 	newOrLostConnectionId=transport->HasLostConnection();
 	if (newOrLostConnectionId!=UNASSIGNED_SYSTEM_ADDRESS)
 	{
-		for (i=0; i < commandParserList.Size(); i++)
+		for (i=0; i < commandParserList.Size(); ++i)
 			commandParserList[i]->OnConnectionLost(newOrLostConnectionId, transport);
 	}
 
@@ -136,7 +133,8 @@ void ConsoleServer::Update(void)
 		char copy[REMOTE_MAX_TEXT_INPUT];
 		memcpy(copy, p->data, p->length);
 		copy[p->length]=0;
-		RakNet::CommandParserInterface::ParseConsoleString((char*)p->data, COMMAND_DELINATOR, COMMAND_DELINATOR_TOGGLE, &numParameters, parameterList, 20); // Up to 20 parameters
+		RakNet::CommandParserInterface::ParseConsoleString(
+        reinterpret_cast<char*>(p->data), COMMAND_DELINATOR, COMMAND_DELINATOR_TOGGLE, &numParameters, parameterList, 20); // Up to 20 parameters
 		if (numParameters==0)
 		{
 			transport->DeallocatePacket(p);
@@ -165,7 +163,7 @@ void ConsoleServer::Update(void)
 			}
 			else // numParameters == 2, including the help tag
 			{
-				for (i=0; i < commandParserList.Size(); i++)
+				for (i=0; i < commandParserList.Size(); ++i)
 				{
 					if (_stricmp(parameterList[1], commandParserList[i]->GetName())==0)
 					{
@@ -181,15 +179,15 @@ void ConsoleServer::Update(void)
 				if (commandParsed==false)
 				{
 					// Try again, for all commands for all parsers.
-					RakNet::RegisteredCommand rc;
-					for (i=0; i < commandParserList.Size(); i++)
+					RakNet::RegisteredCommand registered_command{};
+					for (i=0; i < commandParserList.Size(); ++i)
 					{
-						if (commandParserList[i]->GetRegisteredCommand(parameterList[1], &rc))
+						if (commandParserList[i]->GetRegisteredCommand(parameterList[1], &registered_command))
 						{
-							if (rc.parameterCount==RakNet::CommandParserInterface::VARIABLE_NUMBER_OF_PARAMETERS)
-								transport->Send(p->systemAddress, "(Variable parms): %s %s\r\n", rc.command, rc.commandHelp);
+							if (registered_command.parameterCount==RakNet::CommandParserInterface::VARIABLE_NUMBER_OF_PARAMETERS)
+								transport->Send(p->systemAddress, "(Variable parms): %s %s\r\n", registered_command.command, registered_command.commandHelp);
 							else
-								transport->Send(p->systemAddress, "(%i parms): %s %s\r\n", rc.parameterCount, rc.command, rc.commandHelp);
+								transport->Send(p->systemAddress, "(%i parms): %s %s\r\n", registered_command.parameterCount, registered_command.command, registered_command.commandHelp);
 							commandParsed=true;
 							break;
 						}
@@ -216,7 +214,7 @@ void ConsoleServer::Update(void)
 
 			if (numParameters >=2) // At minimum <CommandParserName> <Command>
 			{
-				unsigned commandParserIndex=(unsigned)-1;
+				auto commandParserIndex= static_cast<unsigned>(-1);
 				// Prefixing with numbers directs to a particular parser
 				if (**parameterList>='0' && **parameterList<='9')
 				{
@@ -231,7 +229,7 @@ void ConsoleServer::Update(void)
 				else
 				{
 					// // Prefixing with the name of a command parser directs to that parser.  See if the first word matches a parser
-					for (i=0; i < commandParserList.Size(); i++)
+					for (i=0; i < commandParserList.Size(); ++i)
 					{
 						if (_stricmp(parameterList[0], commandParserList[i]->GetName())==0)
 						{
@@ -244,7 +242,7 @@ void ConsoleServer::Update(void)
 				if (failed==false)
 				{
 					// -1 means undirected, so otherwise this is directed to a target
-					if (commandParserIndex!=(unsigned)-1)
+					if (commandParserIndex!= static_cast<unsigned>(-1))
 					{
 						// Only this parser should use this command
 						tryAllParsers=false;
@@ -262,7 +260,7 @@ void ConsoleServer::Update(void)
 
 			if (failed == false && tryAllParsers)
 			{
-				for (i=0; i < commandParserList.Size(); i++)
+				for (i=0; i < commandParserList.Size(); ++i)
 				{
 					// Undirected command.  Try all the parsers to see if they understand the command
 					// Pass the 1nd element as the command, and the remainder as the parameter list
@@ -291,16 +289,15 @@ void ConsoleServer::Update(void)
 	}
 }
 
-void ConsoleServer::ListParsers(SystemAddress systemAddress)
+void ConsoleServer::ListParsers(const SystemAddress& systemAddress)
 {
 	transport->Send(systemAddress,"INSTALLED PARSERS:\r\n");
-	unsigned i;
-	for (i=0; i < commandParserList.Size(); i++)
+  for (unsigned i = 0; i < commandParserList.Size(); ++i)
 	{
         transport->Send(systemAddress, "%i. %s\r\n", i+1, commandParserList[i]->GetName());
 	}
 }
-void ConsoleServer::ShowPrompt(SystemAddress systemAddress)
+void ConsoleServer::ShowPrompt(const SystemAddress& systemAddress)
 {
 	 transport->Send(systemAddress, prompt);
 }
@@ -310,12 +307,12 @@ void ConsoleServer::SetPrompt(const char *_prompt)
 		rakFree_Ex(prompt,_FILE_AND_LINE_);
 	if (_prompt && _prompt[0])
 	{
-		size_t len = strlen(_prompt);
-		prompt = (char*) rakMalloc_Ex(len+1,_FILE_AND_LINE_);
+    const size_t len = strlen(_prompt);
+		prompt = static_cast<char*>(rakMalloc_Ex(len + 1, _FILE_AND_LINE_));
 		strcpy(prompt,_prompt);
 	}
 	else
-		prompt=0;
+		prompt=nullptr;
 }
 
 #endif // _RAKNET_SUPPORT_*

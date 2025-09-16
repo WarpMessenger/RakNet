@@ -53,13 +53,14 @@ public:
 	/// \param[out] guidOut A preallocated array to hold the output list of RakNetGUID. Can be 0 if you don't care.
 	/// \param[in,out] outLength On input, the size of \a saOut and \a guidOut. On output, modified to reflect the number of elements actually written
 	/// \return True if \a remoteSystemGuid was found. Otherwise false, and \a saOut, \a guidOut remain unchanged. \a outLength will be set to 0.
-	bool GetConnectionListForRemoteSystem(RakNetGUID remoteSystemGuid, SystemAddress *saOut, RakNetGUID *guidOut, unsigned int *outLength);
+	bool GetConnectionListForRemoteSystem(const RakNetGUID& remoteSystemGuid, SystemAddress *saOut, RakNetGUID *guidOut, unsigned int *outLength);
 
 	/// Returns if g1 is connected to g2
-	bool ConnectionExists(RakNetGUID g1, RakNetGUID g2);
+	bool ConnectionExists(const RakNetGUID& g1, const RakNetGUID& g2);
 
 	/// Returns the average ping between two systems in the connection graph. Returns -1 if no connection exists between those systems
-	uint16_t GetPingBetweenSystems(RakNetGUID g1, RakNetGUID g2) const;
+	uint16_t GetPingBetweenSystems(const RakNetGUID& g1,
+                                 const RakNetGUID& g2) const;
 
 	/// Returns the system with the lowest average ping among all its connections.
 	/// If you need one system in the peer to peer group to relay data, have the FullyConnectedMesh2 host call this function after host migration, and use that system
@@ -79,7 +80,8 @@ public:
 	/// Do not call ProcessNewConnection() manually otherwise
 	/// \param[in] The packet->SystemAddress member
 	/// \param[in] The packet->guid member
-	void AddParticipant(const SystemAddress &systemAddress, RakNetGUID rakNetGUID);
+	void AddParticipant(const SystemAddress &systemAddress,
+                      const RakNetGUID& rakNetGUID);
 
 	/// Get the participants added with AddParticipant()
 	/// \param[out] participantList Participants added with AddParticipant();

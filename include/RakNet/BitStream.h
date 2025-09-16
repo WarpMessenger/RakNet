@@ -474,7 +474,7 @@ namespace RakNet
 
 		/// \brief This is good to call when you are done with the stream to make
 		/// sure you didn't leave any data left over void
-		void AssertStreamEmpty( void );
+		void AssertStreamEmpty( void ) const;
 
 		/// \brief RAKNET_DEBUG_PRINTF the bits in the stream.  Great for debugging.
 		void PrintBits( char *out ) const;
@@ -895,7 +895,7 @@ namespace RakNet
 		inline static bool IsNetworkOrder(void) {bool r = IsNetworkOrderInternal(); return r;}
 		// Not inline, won't compile on PC due to winsock include errors
 		static bool IsNetworkOrderInternal(void);
-		static void ReverseBytes(unsigned char *inByteArray, unsigned char *inOutByteArray, const unsigned int length);
+		static void ReverseBytes(const unsigned char *inByteArray, unsigned char *inOutByteArray, const unsigned int length);
 		static void ReverseBytesInPlace(unsigned char *inOutData,const unsigned int length);
 
 	private:
@@ -913,10 +913,10 @@ namespace RakNet
 		}
 
 		/// \brief Assume the input source points to a native type, compress and write it.
-		void WriteCompressed( const unsigned char* inByteArray, const unsigned int size, const bool unsignedData );
+		void WriteCompressed( const unsigned char* inByteArray, const unsigned int size, const bool unsigned_data );
 
 		/// \brief Assume the input source points to a compressed native type. Decompress and read it.
-		bool ReadCompressed( unsigned char* inOutByteArray,	const unsigned int size, const bool unsignedData );
+		bool ReadCompressed( unsigned char* inOutByteArray,	const unsigned int size, const bool unsigned_data );
 
 
 		BitSize_t numberOfBitsUsed;

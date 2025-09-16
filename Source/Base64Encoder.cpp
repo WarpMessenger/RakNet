@@ -11,22 +11,22 @@
 #include <RakNet/Base64Encoder.h>
 #include <RakNet/RakMemoryOverride.h>
 
-const char *Base64Map(void) {return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";}
-const char *base64Map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const char* Base64Map(void) {
+  return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+}
+auto base64Map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 // 3/17/2013 must be unsigned char or else it will use negative indices
-int Base64Encoding(const unsigned char *inputData, int dataLength, char *outputData)
+int Base64Encoding(const unsigned char *inputData, const int dataLength, char *outputData)
 {
 	// http://en.wikipedia.org/wiki/Base64
 
-	int outputOffset, charCount;
-	int write3Count;
-	outputOffset=0;
-	charCount=0;
+  int outputOffset = 0;
+	int charCount = 0;
 	int j;
 
-	write3Count=dataLength/3;
-	for (j=0; j < write3Count; j++)
+  const int write3Count = dataLength / 3;
+	for (j=0; j < write3Count; ++j)
 	{
 		// 6 leftmost bits from first byte, shifted to bits 7,8 are 0
 		outputData[outputOffset++]=base64Map[inputData[j*3+0] >> 2];
@@ -88,8 +88,8 @@ int Base64Encoding(const unsigned char *inputData, int dataLength, char *outputD
 	return outputOffset;
 }
 
-int Base64Encoding(const unsigned char *inputData, int dataLength, char **outputData)
+int Base64Encoding(const unsigned char *inputData, const int dataLength, char **outputData)
 {
-	*outputData = (char*) rakMalloc_Ex(dataLength * 2 + 6, _FILE_AND_LINE_);
+	*outputData = static_cast<char*>(rakMalloc_Ex(dataLength * 2 + 6, _FILE_AND_LINE_));
 	return Base64Encoding(inputData, dataLength, *outputData);
 }
