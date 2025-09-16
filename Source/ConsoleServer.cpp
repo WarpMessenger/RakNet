@@ -11,6 +11,8 @@
 #include <RakNet/NativeFeatureIncludes.h>
 #if _RAKNET_SUPPORT_ConsoleServer==1
 
+#include <cstdlib> // for atoi
+
 #include <RakNet/ConsoleServer.h>
 #include <RakNet/TransportInterface.h>
 #include <RakNet/CommandParserInterface.h>
@@ -316,3 +318,4 @@ void ConsoleServer::SetPrompt(const char *_prompt)
 }
 
 #endif // _RAKNET_SUPPORT_*
+
