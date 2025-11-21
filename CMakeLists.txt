@@ -14,7 +14,7 @@ else()
     add_library(${PROJECT_NAME} STATIC)
 endif()
 
-FetchContent_Declar(fmtlib
+FetchContent_Declare(fmtlib
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
     GIT_TAG 12.1.0
 )
@@ -66,4 +66,5 @@ target_link_options(${PROJECT_NAME} PRIVATE
     $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/NODEFAULTLIB:LIBCMTD.lib>
     $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/NODEFAULTLIB:MSVCRT.lib>
 )
+
 
