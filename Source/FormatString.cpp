@@ -9,9 +9,9 @@
  */
 
 #include "../include/RakNet/FormatString.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdarg>
 #include "../include/RakNet/LinuxStrings.h"
 
 char * FormatString(const char *format, ...)
@@ -21,12 +21,21 @@ char * FormatString(const char *format, ...)
 	va_list ap;
 	va_start(ap, format);
 
-	if (++textIndex==4)
-		textIndex=0;
-	_vsnprintf(text[textIndex], 8096, format, ap);
-	va_end(ap);
-	text[textIndex][8096-1]=0;
+	if (++textIndex == 4)
+		textIndex = 0;
 
+	int written = std::vsnprintf(text[textIndex],
+	                             sizeof(text[textIndex]),
+	                             format,
+	                             ap);
+	va_end(ap);
+
+	if (written < 0 ||
+	    written >= static_cast<int>(sizeof(text[textIndex])))
+	{
+		text[textIndex][sizeof(text[textIndex]) - 1] = '\0';
+	}
+	
 	return text[textIndex];
 }
 
@@ -34,7 +43,12 @@ char * FormatStringTS(char *output, const char *format, ...)
 {
 	va_list ap;
 	va_start(ap, format);
-	_vsnprintf(output, 512, format, ap);
+	int written = std::vsnprintf(output, 512, format, ap);
 	va_end(ap);
+
+	if (written < 0 || written >= 512)
+		output[511] = '\0';
+
 	return output;
 }
+
