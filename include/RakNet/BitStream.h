@@ -422,10 +422,10 @@ namespace RakNet
 		/// \param[in] maximum Maximum value of \a value
 		/// \param[in] allowOutsideRange If true, all sends will take an extra bit, however value can deviate from outside \a minimum and \a maximum. If false, will assert if the value deviates. This should match the corresponding value passed to Write().
 		template <class templateType>
-		bool ReadBitsFromIntegerRange( templateType &value, const templateType minimum, const templateType maximum, bool allowOutsideRange=false );
+		bool ReadBitsFromIntegerRange( templateType &value, const templateType minimum, const templateType /*maximum*/, bool allowOutsideRange=false );
 		/// \param[in] requiredBits Primarily for internal use, called from above function() after calculating number of bits needed to represent maximum-minimum
 		template <class templateType>
-		bool ReadBitsFromIntegerRange( templateType &value, const templateType minimum, const templateType maximum, const int requiredBits, bool allowOutsideRange=false );
+		bool ReadBitsFromIntegerRange( templateType &value, const templateType minimum, const templateType /*maximum*/, const int requiredBits, bool allowOutsideRange=false );
 
 		/// \brief Read a normalized 3D vector, using (at most) 4 bytes + 3 bits instead of 12-24 bytes.  
 		/// \details Will further compress y or z axis aligned vectors.

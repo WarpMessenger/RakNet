@@ -86,7 +86,7 @@ enum ConnectionState
 
 /// Given a number of bits, return how many bytes are needed to represent that.
 #define BITS_TO_BYTES(x) (((x)+7)>>3)
-#define BYTES_TO_BITS(x) ((x)<<3)
+#define BYTES_TO_BITS(x) (static_cast<BitSize_t>(x) << 3)
 
 /// \sa NetworkIDObject.h
 typedef unsigned char UniqueIDType;
@@ -198,15 +198,6 @@ struct RAK_DLL_EXPORT SystemAddress
 	SystemAddress(const char *str);
 	SystemAddress(const char *str, unsigned short port);
 
-
-
-
-
-
-
-
-
-
 	/// SystemAddress, with RAKNET_SUPPORT_IPV6 defined, holds both an sockaddr_in6 and a sockaddr_in
 	union// In6OrIn4
 	{
@@ -298,6 +289,7 @@ struct RAK_DLL_EXPORT SystemAddress
 
 	bool IsLANAddress(void);
 
+	SystemAddress(const SystemAddress&) = default;
 	SystemAddress& operator = ( const SystemAddress& input );
 	bool operator==( const SystemAddress& right ) const;
 	bool operator!=( const SystemAddress& right ) const;
@@ -337,6 +329,7 @@ struct RAK_DLL_EXPORT RakNetGUID
 
 	static unsigned long ToUint32( const RakNetGUID &g );
 
+	RakNetGUID(const RakNetGUID&) = default;
 	RakNetGUID& operator = ( const RakNetGUID& input )
 	{
 		g=input.g;
