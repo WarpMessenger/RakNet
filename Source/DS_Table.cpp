@@ -15,7 +15,7 @@
 #include <RakNet/RakAssert.h>
 #include <string>
 #include <string_view>
-#include <format>
+#include <fmt/format.h>
 
 using namespace DataStructures;
 
@@ -968,7 +968,7 @@ std::string Table::PrintRow(const char columnDelineator,
 
         if (col.columnType == NUMERIC) {
             if (!cell->isEmpty) {
-                out += std::format("{:.6f}", cell->i);
+                out += fmt::format("{:.6f}", cell->i);
             }
         } else if (col.columnType == STRING) {
             if (!cell->isEmpty && cell->c) {
@@ -976,7 +976,7 @@ std::string Table::PrintRow(const char columnDelineator,
             }
         } else if (col.columnType == POINTER) {
             if (!cell->isEmpty && cell->ptr) {
-                out += std::format("{:p}", cell->ptr);
+                out += fmt::format("{:p}", static_cast<const void*>(cell->ptr));
             }
         } else {
             //
@@ -1073,3 +1073,4 @@ Table& Table::operator = ( const Table& input )
 #ifdef _MSC_VER
 #pragma warning( pop )
 #endif
+
