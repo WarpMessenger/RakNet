@@ -4,6 +4,8 @@ project(RakNet LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(FetchContent)
+
 option(RAKNET_BUILD_SHARED "Build RakNet as a shared library" OFF)
 
 if(RAKNET_BUILD_SHARED)
@@ -11,6 +13,12 @@ if(RAKNET_BUILD_SHARED)
 else()
     add_library(${PROJECT_NAME} STATIC)
 endif()
+
+FetchContent_Declar(fmtlib
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG 12.1.0
+)
+FetchContent_MakeAvailable(fmtlib)
 
 file(GLOB ALL_HEADER_SRCS CONFIGURE_DEPENDS "${RakNet_SOURCE_DIR}/include/*.h")
 file(GLOB ALL_CPP_SRCS    CONFIGURE_DEPENDS "${RakNet_SOURCE_DIR}/Source/*.cpp")
@@ -43,6 +51,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     $<$<PLATFORM_ID:Windows>:ws2_32.lib>
     $<$<NOT:$<PLATFORM_ID:Windows>>:pthread>
+    fmt::fmt
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
@@ -57,3 +66,4 @@ target_link_options(${PROJECT_NAME} PRIVATE
     $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/NODEFAULTLIB:LIBCMTD.lib>
     $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/NODEFAULTLIB:MSVCRT.lib>
 )
+
