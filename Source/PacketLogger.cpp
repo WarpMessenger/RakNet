@@ -24,7 +24,7 @@
 #include "../include/RakNet/SocketIncludes.h"
 #include "../include/RakNet/gettimeofday.h"
 #include <string>
-#include <format>
+#include <fmt/format.h>
 
 #ifdef _MSC_VER
 #pragma warning( push )
@@ -63,7 +63,7 @@ unsigned int splitPacketId, unsigned int splitPacketIndex, unsigned int splitPac
 	// would just be redundant.
 	if(idToPrint == nullptr)
 	{
-    const std::string numericID = std::format("{}", id);
+		const std::string numericID = fmt::format("{}", id);
 		idToPrint = numericID.c_str();
 	}
 
@@ -84,7 +84,7 @@ unsigned int splitPacketId, unsigned int splitPacketIndex, unsigned int splitPac
 	if (reliableMessageNumber==(unsigned int)-1)
 		str3 = "N/A";
 	else
-    str3 = std::format("{}", reliableMessageNumber);
+    str3 = fmt::format("{}", reliableMessageNumber);
 
   char buffer[1024];
 	int written = std::snprintf(buffer, sizeof(buffer),
@@ -508,3 +508,4 @@ void PacketLogger::SetLogDirectMessages(bool send)
 #endif
 
 #endif // _RAKNET_SUPPORT_*
+
