@@ -20,7 +20,7 @@
 #include "../include/RakNet/GetTime.h"
 #include "../include/RakNet/PacketLogger.h"
 #include <string>
-#include <format>
+#include <fmt/format.h>
 
 using namespace RakNet;
 
@@ -201,7 +201,7 @@ void NatPunchthroughServer::Update(void)
 							connectionAttempt->sender->systemAddress.ToString(true,addr1);
 							connectionAttempt->recipient->systemAddress.ToString(true,addr2);
               const std::string str =
-                      std::format("Sending ID_NAT_TARGET_UNRESPONSIVE to sender {} and recipient {}.",
+                      fmt::format("Sending ID_NAT_TARGET_UNRESPONSIVE to sender {} and recipient {}.",
                                   addr1, addr2);
 							natPunchthroughServerDebugInterface->OnServerMessage(str.c_str());
 							RakNet::RakString log;
@@ -626,3 +626,4 @@ void NatPunchthroughServer::StartPunchthroughForUser(User *user)
 }
 
 #endif // _RAKNET_SUPPORT_*
+
