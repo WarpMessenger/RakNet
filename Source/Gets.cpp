@@ -15,9 +15,12 @@
 extern "C" {
 #endif
 
-char * Gets ( char * str, int num )
+char* Gets(char* str, int num)
 {
-	fgets(str, num, stdin);
+    if (!fgets(str, num, stdin)) {
+        return nullptr;
+    }
+
 	if (str[0]=='\n' || str[0]=='\r')
 		str[0]=0;
 

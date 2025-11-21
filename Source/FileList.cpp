@@ -107,6 +107,7 @@ FileList::~FileList()
 {
 	Clear();
 }
+
 void FileList::AddFile(const char *filepath, const char *filename, FileListNodeContext context)
 {
 	if (filepath==0 || filename==0)
@@ -120,7 +121,12 @@ void FileList::AddFile(const char *filepath, const char *filename, FileListNodeC
 	if (fp==0)
 		return;
 	fseek(fp, 0, SEEK_END);
-	int length = ftell(fp);
+	size_t length = static_cast<size_t>(ftell(fp));
+	if(length < 0){
+		RakAssert("Length is negative");
+		fclose(fp);
+		return;
+	}
 	fseek(fp, 0, SEEK_SET);
 
 	if (length > (int) ((unsigned int)-1 / 8))
@@ -130,7 +136,6 @@ void FileList::AddFile(const char *filepath, const char *filename, FileListNodeC
 		fclose(fp);
 		return;
 	}
-
 
 #if USE_ALLOCA==1
 	bool usedAlloca=false;
@@ -156,6 +161,7 @@ void FileList::AddFile(const char *filepath, const char *filename, FileListNodeC
 		rakFree_Ex(data, _FILE_AND_LINE_ );
 
 }
+
 void FileList::AddFile(const char *filename, const char *fullPathToFile, const char *data, const unsigned dataLength, const unsigned fileLength, FileListNodeContext context, bool isAReference, bool takeDataPointer)
 {
 	if (filename==0)
