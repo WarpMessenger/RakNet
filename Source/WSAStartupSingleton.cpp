@@ -14,7 +14,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
-#include <format>
+#include <fmt/format.h>
 #include <iostream>
 
 WSAStartupSingleton& WSAStartupSingleton::instance(){
@@ -42,7 +42,7 @@ void WSAStartupSingleton::addRef()
 		if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
 			DWORD error = GetLastError();
 			throw std::runtime_error(
-				std::format("WSAStartup failed with error code: {}", error)
+				fmt::format("WSAStartup failed with error code: {}", error)
 			);
 		}
 	}
@@ -63,3 +63,4 @@ void WSAStartupSingleton::release()
 	}
 #endif
 }
+
