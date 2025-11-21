@@ -12,7 +12,7 @@
 #if _RAKNET_SUPPORT_PacketLogger == 1
 #include <RakNet/PacketFileLogger.h>
 #include <RakNet/GetTime.h>
-#include <format>
+#include <fmt/format.h>
 #include <string>
 #include <cstring>
 
@@ -35,9 +35,9 @@ void PacketFileLogger::StartLog(const char *filenamePrefix)
     // Open file for writing
     std::string filename;
     if (strlen(filenamePrefix) > 0)
-        filename = std::format("{}_{}.csv", filenamePrefix, static_cast<int>(RakNet::GetTimeMS()));
+        filename = fmt::format("{}_{}.csv", filenamePrefix, static_cast<int>(RakNet::GetTimeMS()));
     else
-        filename = std::format("PacketLog_{}.csv", static_cast<int>(RakNet::GetTimeMS()));
+        filename = fmt::format("PacketLog_{}.csv", static_cast<int>(RakNet::GetTimeMS()));
 
     packetLogFile = fopen(filename.c_str(), "wt");
     LogHeader();
@@ -57,3 +57,4 @@ void PacketFileLogger::WriteLog(const char *str)
 }
 
 #endif // _RAKNET_SUPPORT_*
+
