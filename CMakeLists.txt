@@ -50,7 +50,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     $<$<PLATFORM_ID:Windows>:ws2_32.lib>
-    $<$<NOT:$<PLATFORM_ID:Windows>>:pthread>
+    $<$<AND:$<NOT:$<PLATFORM_ID:Windows>>,$<NOT:ANDROID>>:pthread>
     fmt::fmt
 )
 
@@ -66,5 +66,6 @@ target_link_options(${PROJECT_NAME} PRIVATE
     $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/NODEFAULTLIB:LIBCMTD.lib>
     $<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/NODEFAULTLIB:MSVCRT.lib>
 )
+
 
 
