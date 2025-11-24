@@ -14,10 +14,7 @@
 
 #include <stdio.h> // RAKNET_DEBUG_PRINTF
 #include "../include/RakNet/RakAssert.h"
-#if defined(ANDROID)
-//#include <asm/io.h>
-#include <sys/io.h>
-#elif defined(_WIN32) || defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__CYGWIN__)
 #include <io.h>
 #endif
 
@@ -819,5 +816,6 @@ bool FileList::FixEndingSlash(char *str)
 #endif
 
 #endif // _RAKNET_SUPPORT_FileOperations
+
 
 
